@@ -1,3 +1,10 @@
+XChat.js
+~~~~~~~~~~
+
+This is a fork of xchat that uses webkit as the "main view" engine.
+
+At the moment it is non-working.
+
 X-Chat README
 ~~~~~~~~~~~~~
  X-Chat ("xchat") Copyright (c) 1998-2010 By Peter Zelezny.
