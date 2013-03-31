@@ -1,13 +1,17 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
 <title>Xchat Esoscheletro</title>
 <style>
 body {
     font-size:xx-small;
     padding: 0.5ex 1.5ex;
     background-color: #202020;
-    } 
-.bk{color: gray;} 
-.sys{color: red;} 
+    color: #FFF;
+    }
+.bk{color: gray;}
+.sys{color: red;}
 .angle{opacity: 0.0;}
 .utext{color: white;}
 .time{color: white;}
@@ -16,40 +20,10 @@ body {
     display: none;
       }
 </style>
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 <script type="text/javascript">
-
-function strip(html) 
-    {  
-        var tmp = document.createElement("DIV"); 
-        tmp.innerHTML = html; 
-        var urlRegex =/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;   
-        return tmp.innerText.replace(urlRegex, function(url) {  return '\n' + url   })
-} 
-
-function renderHTML(text) { 
-    var rawText = text
-    var urlRegex =/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;   
-
-    return rawText.replace(urlRegex, function(url) {   
-
-    if ( ( url.indexOf(".jpg") > 0 ) || ( url.indexOf(".png") > 0 ) || ( url.indexOf(".gif") > 0 ) ) {
-           return '<a href="' + url + '"><img style="width: 100px; border: 0px; -moz-border-radius: 5px; border-radius: 5px;" src="' + url + '">' + '</a>' + '<br/>'
-        } else {
-            return '<a href="' + url + '">' + url + '</a>' + '<br/>'
-        }
-    }) 
-} 
-
-$(document).ready(function() {
-$('p').each(function(i,element) {
-//console.log(element.innerHTML);
-element.innerHTML = renderHTML(element.innerHTML);
-console.log(element.innerHTML);
-});
-});
-
-
+function printaraw(s){ $("#irc").append('<p>'+s+'</p>'); }
+function clear(s){ $("#irc").html(""); }
 </script>
 
 </head>

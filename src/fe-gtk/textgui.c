@@ -42,11 +42,15 @@
 #include "../common/outbound.h"
 #include "../common/fe.h"
 #include "../common/text.h"
+#include "../common/util.h"
 #include "gtkutil.h"
 #include "xtext.h"
 #include "maingui.h"
 #include "palette.h"
 #include "textgui.h"
+#include <webkit/webkit.h>
+#include <JavaScriptCore/JavaScript.h>
+#include "WebView.h"
 
 extern struct text_event te[];
 extern char *pntevts_text[];
@@ -116,6 +120,10 @@ PrintTextLine (xtext_buffer *xtbuf, unsigned char *text, int len, int indent, ti
 void
 PrintTextRaw (void *xtbuf, unsigned char *text, int indent, time_t stamp)
 {
+
+	//XXX: prova di merda
+	fprintf(stderr,"[PrintTextRaw] %s\n",strip_color(text,strlen(text), STRIP_ALL));
+	printaraw(text);
 	char *last_text = text;
 	int len = 0;
 	int beep_done = FALSE;
