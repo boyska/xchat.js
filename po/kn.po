@@ -11,6 +11,7 @@ msgstr ""
 "PO-Revision-Date: 2010-03-14 00:03+0530\n"
 "Last-Translator: Shankar Prasad <svenkate@redhat.com>\n"
 "Language-Team: Kannada <debian-l10n-kannada@lists.debian.org>\n"
+"Language: kn\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -898,8 +899,8 @@ msgstr "%C22*%O$tDCC RECV%C26 $2%O ಗೆ%C26 $1%O ಸ್ಥಗಿತಗೊಳ�
 msgid ""
 "%C22*%O$tDCC RECV%C26 $1%O from%C26 $3%O complete %C30[%C26$4%O cps%C30]%O."
 msgstr ""
-"%C22*%O$tDCC RECV%C26 $1%O %C26 $3%O ಇಮದ ಪೂರ್ಣಗೊಂಡಿದೆ %C30[%C26$4%O cps%C30]%"
-"O."
+"%C22*%O$tDCC RECV%C26 $1%O %C26 $3%O ಇಮದ ಪೂರ್ಣಗೊಂಡಿದೆ %C30[%C26$4%O cps"
+"%C30]%O."
 
 #: src/common/textevents.h:162
 msgid "%C22*%O$tDCC RECV connection established to%C26 $1 %C30[%O$2%C30]"
