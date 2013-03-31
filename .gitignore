@@ -25,3 +25,6 @@ stamp-h1
 
 autom4te.cache/
 aclocal.m4
+*.Po
+*.Plo
+*.gmo
