@@ -11,11 +11,11 @@
 #include <gtk/gtkwindow.h>
 #include "WebView.h"
 #include "../common/util.h"
-
+int CREATED=0;
 GtkWidget* webView;
 GtkWidget* scrolledw;
 WebKitWebFrame* frame;
-JSGlobalContextRef context;
+JSGlobalContextRef context=NULL;
 JSObjectRef globalobj;
 
 enum line_type {
@@ -38,15 +38,18 @@ void w_clear(){
 }
 
 void w_printaraw(char* s){
+    if(context==NULL) create_wview();
     JSStringRef printaraw= JSStringCreateWithUTF8CString("w_lineraw");
     JSValueRef  arguments[1];
     JSValueRef result;
     int num_arguments = 1;
     //ci strippo via gli ansii cazzi colorazzi perche' spaccano la JSValueMakeString
-    JSStringRef string = JSStringCreateWithUTF8CString(strip_color(s,strlen(s), STRIP_ALL));
+    s=strip_color(s,-1, STRIP_ALL);
+    JSStringRef string = JSStringCreateWithUTF8CString((const char *)s);
     arguments[0] = JSValueMakeString(context,string);
     JSObjectRef functionObject = (JSObjectRef)JSObjectGetProperty(context, globalobj, printaraw, NULL);
     result = JSObjectCallAsFunction(context, functionObject, globalobj, num_arguments, arguments, NULL);
+
 }
 
 
@@ -75,6 +78,7 @@ WebKitNavigationResponse click_callback(WebKitWebView* web_view,WebKitWebFrame* 
 
 
 void create_wview(){
+    if(!CREATED){ //XXX: Gestire a modo l'init e non a caso come adesso.
     webView = webkit_web_view_new();
     //XXX: gestire a modino tutti i path (locali?) della roba (html,js,css)
     char path[PATH_MAX];
@@ -84,8 +88,8 @@ void create_wview(){
     exit(-1);
     }
     sprintf(path,"%s.html",path);
-    webkit_web_view_open(WEBKIT_WEB_VIEW(webView), path);
-    g_signal_connect(G_OBJECT(webView),"navigation-requested",G_CALLBACK(click_callback),NULL);
+     webkit_web_view_open(WEBKIT_WEB_VIEW(webView), path);
+    //g_signal_connect(G_OBJECT(webView),"navigation-requested",G_CALLBACK(click_callback),NULL);
 
     gtk_widget_show (webView);
     frame = webkit_web_view_get_main_frame(WEBKIT_WEB_VIEW(webView));
@@ -98,6 +102,8 @@ void create_wview(){
     gtk_container_set_border_width (GTK_CONTAINER(scrolledw), 10);
     gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW(scrolledw),GTK_POLICY_AUTOMATIC,GTK_POLICY_ALWAYS);
     gtk_container_add (GTK_CONTAINER(scrolledw), webView);
+}
+CREATED=1;
 }
 
 WebKitWebView * get_wview(){

@@ -49,7 +49,7 @@
 #include <gtk/gtkclipboard.h>
 #include <gtk/gtkversion.h>
 #include <gtk/gtkwindow.h>
-#include <webkit/webkit.h>
+#include "WebView.h"
 
 
 #ifdef XCHAT
@@ -833,8 +833,6 @@ XXX: metto la webview al posto della fuffa sua
 
 */
 
-GtkWidget* webView;
-GtkWidget* sw;
 struct User* user_tmp;
 GtkWidget *
 gtk_xtext_new (GdkColor palette[], int separator)
@@ -846,22 +844,14 @@ gtk_xtext_new (GdkColor palette[], int separator)
 	xtext->wordwrap = TRUE;
 	xtext->buffer = gtk_xtext_buffer_new (xtext);
 	xtext->orig_buffer = xtext->buffer;
-	webView = webkit_web_view_new();
+	
 
 	gtk_widget_set_double_buffered (GTK_WIDGET (xtext), FALSE);
 	gtk_xtext_set_palette (xtext, palette);
 
 	//return GTK_WIDGET (xtext);
-	char patta[PATH_MAX];
-	readlink("/proc/self/exe", patta,  PATH_MAX);
-	sprintf(patta,"%s.html", patta);
-	webkit_web_view_open(WEBKIT_WEB_VIEW(webView), patta);
-    gtk_widget_show (webView);
-	sw = gtk_scrolled_window_new(NULL,NULL);
-	gtk_container_set_border_width (GTK_CONTAINER(sw), 10);
-	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW(sw),GTK_POLICY_AUTOMATIC,GTK_POLICY_ALWAYS);
-	gtk_container_add (GTK_CONTAINER(sw), webView);
-	return sw;
+    create_wview();
+	return get_wview_container();
 }
 
 static void
