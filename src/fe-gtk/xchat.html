@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <title>Xchat Esoscheletro</title>
 <style>
+h1 {font-size: big;}
 body {
     font-size:xx-small;
     padding: 0.5ex 1.5ex;
@@ -19,17 +20,130 @@ body {
     visibility: hidden;
     display: none;
       }
+
+p {
+    margin: 0;
+    position: relative;
+}
+
+.time {
+    position: absolute;
+    right: 0px;
+    color: #888;
+}
+
+.time:before {
+    content: '[';
+    color: #aaa;
+}
+
+.time:after {
+    content: ']';
+    color: #aaa;
+}
+
+.nick {
+    display: inline-block;
+    width: 100px;
+    text-align: right;
+    padding-right: 10px;
+    font-weight: bold;
+    color: #C4AF75;
+}
+
+span.msg {
+    clear: both;
+    display: inline-block;
+    text-align: left;
+}
+
+/*
+p.msg > .nick:before {
+    content: '<';
+}
+
+p.msg > .nick:after {
+    content: '> ';
+}
+*/
+
+p.action .nick:before {
+    content: "• ";
+}
+
+p.action .msg {
+        font-weight: bold;
+        color: #c4af75;
+}
+
+p.action .nick {
+    margin-left:116px;
+    width: auto;
+    padding-right: 0px;
+}
+
+p.partjoin .partjoin {
+    margin-left:116px;
+    color: #999;
+}
+
+p.partjoin .partjoin:before {
+    content: "*** ";
+}
+
+
 </style>
+<!-- tutta la path policy e' da rivedere -->
 <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="jquery.scrollTo.min.js"></script>
 <script type="text/javascript">
-function printaraw(s){ $("#irc").append('<p>'+s+'</p>'); }
-function clear(s){ $("#irc").html(""); }
+templates={
+    raw:'<div class="line" id="l{counter}">{text}</div>',
+    server: '<div class="line server" id="l{counter}">{text}</div>',
+}
+
+function parses(tmpl,s) {
+    var rex;
+    for (p in s) {
+        rex = new RegExp('{'+p+'}','g');
+        tmpl = tmpl.replace(rex,s[p]); }
+    return tmpl;
+}
+
+function Xchat(){
+    var cr= 0
+    var MAXBACK= 200 //quante linee tengo al max visibili (andra' settato da fuori rispettando le opzioni)
+    var OLDERLN= 0   //indice della prima riga da togliere se supero MAXBACK
+    var counter= function(){cr=cr+1; if(cr>MAXBACK){$('#l'+OLDERLN).remove(); OLDERLN=OLDERLN+1;} return cr;}
+    var funct ={ //tutta la collezione di metodi interni
+                 //in un futuro l'utente magari' potra' sostituirli/modificarli
+                 scroll: function(){$.scrollTo("100%");},
+                 rmolder: function(from,to){for (var i=from;i<to;i++) $('#l'+i).remove();}
+
+               }
+    this.clear=function(){$("#irc").html("");}
+    this.printaraw=   function(s){ $("#irc").append(parses(templates.raw,{counter:counter(),text:s})); funct.scroll(); }
+    this.printaserver=function(s){ $("#irc").append(parses(templates.server,{counter:counter(),text:s})); funct.scroll(); }
+
+}
+
+xchat= new Xchat();
+
+w_lineraw=xchat.printaraw;
+w_lineserver=xchat.printaserver;
+w_clear=xchat.clear;
+
 </script>
 
 </head>
 <body>
 <div class="container">
-<h3>TEST Locale</h3>
+<h1>TEST Locale</h1>
+<p class="line" id="it1">UNO</p>
+<p class="line" id="it2">DUE</p>
+<p class="line" id="it3">TRE</p>
+<p class="line" id="it4">QUATTRO</p>
+<p class="msg"><span class="time">14:55:52</span> <span class="nick" style="color: rgb(118, 149, 70);">Petonio</span> <span class="msg">come quando fuori piove.</span></p>
 <div id="irc">
 
 </div>

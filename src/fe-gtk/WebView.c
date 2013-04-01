@@ -9,34 +9,68 @@
 #include <gtk/gtkclipboard.h>
 #include <gtk/gtkversion.h>
 #include <gtk/gtkwindow.h>
-#include <webkit/webkit.h>
-#include <JavaScriptCore/JavaScript.h>
 #include "WebView.h"
 #include "../common/util.h"
+
 GtkWidget* webView;
 GtkWidget* scrolledw;
 WebKitWebFrame* frame;
 JSGlobalContextRef context;
 JSObjectRef globalobj;
 
+enum line_type {
+    text,
+    backlog,
+    servermsg,
+    privatemsg,
+    highlight
+  };
+typedef enum line_type linetype;
 //XXX: definire una struttura js un po' piu' seria e cercare di fare le cose pulite
 
 /* METODI DEFINITI NEL JS (vediamo di mantenere i nomi uguali)*/
 
-JSStringRef clear;
+void w_clear(){
+    //e' l'altro metodo, e' perfetto per tutta la roba che non ritorna
+    webkit_web_view_execute_script(WEBKIT_WEB_VIEW(webView),"w_clear();");
+    //in teoria funziona anche la open con javascript: come url
 
-void printaraw(char* s){
-JSStringRef printaraw= JSStringCreateWithUTF8CString("printaraw");
-JSValueRef  arguments[1];
-JSValueRef result;
-int num_arguments = 1;
-//ci strippo via gli ansii cazzi colorazzi perche' spaccano la JSValueMakeString
-JSStringRef string = JSStringCreateWithUTF8CString(strip_color(s,strlen(s), STRIP_ALL));
-arguments[0] = JSValueMakeString(context,string);
-JSObjectRef functionObject = (JSObjectRef)JSObjectGetProperty(context, globalobj, printaraw, NULL);
-result = JSObjectCallAsFunction(context, functionObject, globalobj, num_arguments, arguments, NULL);
 }
 
+void w_printaraw(char* s){
+    JSStringRef printaraw= JSStringCreateWithUTF8CString("w_lineraw");
+    JSValueRef  arguments[1];
+    JSValueRef result;
+    int num_arguments = 1;
+    //ci strippo via gli ansii cazzi colorazzi perche' spaccano la JSValueMakeString
+    JSStringRef string = JSStringCreateWithUTF8CString(strip_color(s,strlen(s), STRIP_ALL));
+    arguments[0] = JSValueMakeString(context,string);
+    JSObjectRef functionObject = (JSObjectRef)JSObjectGetProperty(context, globalobj, printaraw, NULL);
+    result = JSObjectCallAsFunction(context, functionObject, globalobj, num_arguments, arguments, NULL);
+}
+
+
+void w_printline(linetype type, char* text, char* nickname){
+
+
+}
+
+/*
+XXX: se l'uri e' del tipo file:/// per adesso uso la policy di default
+da riguardare.
+Negli altri casi apro l'uri nel browser con lo stesso metodo di xchat originale.
+Inoltre maschero il click per evitare che ci vada anche la webview
+*/
+WebKitNavigationResponse click_callback(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetworkRequest *request,gpointer user_data){
+    const char *new_uri =   webkit_network_request_get_uri(request);
+    int result=strncmp(new_uri,"file",4);
+    if(result!=0){
+        fe_open_url(new_uri);
+        return WEBKIT_NAVIGATION_RESPONSE_IGNORE;
+    }
+    else
+        return WEBKIT_NAVIGATION_RESPONSE_ACCEPT;
+}
 
 
 
@@ -51,12 +85,16 @@ void create_wview(){
     }
     sprintf(path,"%s.html",path);
     webkit_web_view_open(WEBKIT_WEB_VIEW(webView), path);
+    g_signal_connect(G_OBJECT(webView),"navigation-requested",G_CALLBACK(click_callback),NULL);
+
     gtk_widget_show (webView);
     frame = webkit_web_view_get_main_frame(WEBKIT_WEB_VIEW(webView));
     context= webkit_web_frame_get_global_context(frame);
     globalobj= JSContextGetGlobalObject(context);
     //incastro la webview vera in una scrolled windows cosi' ho quello che mi aspetto dallo scrolling
     scrolledw = gtk_scrolled_window_new(NULL,NULL);
+    g_object_set (scrolledw, "shadow-type", GTK_SHADOW_IN, NULL);
+
     gtk_container_set_border_width (GTK_CONTAINER(scrolledw), 10);
     gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW(scrolledw),GTK_POLICY_AUTOMATIC,GTK_POLICY_ALWAYS);
     gtk_container_add (GTK_CONTAINER(scrolledw), webView);
