@@ -527,7 +527,6 @@ dnl *********************************************************************
 
 AM_CONDITIONAL(USE_OPENSSL, test "x$openssl" = "xyes")
 AM_CONDITIONAL(USE_LIBSEXY, test "x$spell" = "xstatic")
-AM_CONDITIONAL(DO_TEXT, test "x$textfe" = "xyes")
 AM_CONDITIONAL(DO_GTK, test "x$gtkfe" = "xyes")
 AM_CONDITIONAL(DO_PERL, test "x$perl" = "xyes")
 AM_CONDITIONAL(DO_PYTHON, test "x$python" = "xyes")
@@ -787,7 +786,6 @@ Makefile
 src/Makefile
 src/common/Makefile
 src/common/dbus/Makefile
-src/fe-text/Makefile
 src/fe-gtk/Makefile
 src/pixmaps/Makefile
 plugins/Makefile

@@ -10,8 +10,7 @@ userlist.o: userlist.c /usr/include/stdio.h /usr/include/features.h \
  /usr/include/_G_config.h /usr/include/wchar.h \
  /usr/lib/gcc/i486-linux-gnu/4.7/include/stdarg.h \
  /usr/include/i386-linux-gnu/bits/stdio_lim.h \
- /usr/include/i386-linux-gnu/bits/sys_errlist.h \
- /usr/include/i386-linux-gnu/bits/stdio.h /usr/include/stdlib.h \
+ /usr/include/i386-linux-gnu/bits/sys_errlist.h /usr/include/stdlib.h \
  /usr/include/i386-linux-gnu/bits/waitflags.h \
  /usr/include/i386-linux-gnu/bits/waitstatus.h /usr/include/endian.h \
  /usr/include/i386-linux-gnu/bits/endian.h \
@@ -23,9 +22,7 @@ userlist.o: userlist.c /usr/include/stdio.h /usr/include/features.h \
  /usr/include/i386-linux-gnu/bits/time.h \
  /usr/include/i386-linux-gnu/sys/sysmacros.h \
  /usr/include/i386-linux-gnu/bits/pthreadtypes.h /usr/include/alloca.h \
- /usr/include/string.h /usr/include/xlocale.h \
- /usr/include/i386-linux-gnu/bits/string.h \
- /usr/include/i386-linux-gnu/bits/string2.h xchat.h ../../config.h \
+ /usr/include/string.h /usr/include/xlocale.h xchat.h ../../config.h \
  /usr/include/glib-2.0/glib/gslist.h /usr/include/glib-2.0/glib/gmem.h \
  /usr/include/glib-2.0/glib/gtypes.h \
  /usr/lib/i386-linux-gnu/glib-2.0/include/glibconfig.h \
@@ -67,9 +64,8 @@ userlist.o: userlist.c /usr/include/stdio.h /usr/include/features.h \
  /usr/include/openssl/tls1.h /usr/include/openssl/dtls1.h \
  /usr/include/openssl/pqueue.h /usr/include/i386-linux-gnu/sys/time.h \
  /usr/include/openssl/ssl23.h /usr/include/openssl/srtp.h \
- /usr/include/libintl.h /usr/include/locale.h \
- /usr/include/i386-linux-gnu/bits/locale.h modes.h fe.h userlist.h dcc.h \
- notify.h tree.h xchatc.h util.h
+ /usr/include/libintl.h modes.h fe.h userlist.h dcc.h notify.h tree.h \
+ xchatc.h util.h
 
 /usr/include/stdio.h:
 
@@ -102,8 +98,6 @@ userlist.o: userlist.c /usr/include/stdio.h /usr/include/features.h \
 /usr/include/i386-linux-gnu/bits/stdio_lim.h:
 
 /usr/include/i386-linux-gnu/bits/sys_errlist.h:
-
-/usr/include/i386-linux-gnu/bits/stdio.h:
 
 /usr/include/stdlib.h:
 
@@ -138,10 +132,6 @@ userlist.o: userlist.c /usr/include/stdio.h /usr/include/features.h \
 /usr/include/string.h:
 
 /usr/include/xlocale.h:
-
-/usr/include/i386-linux-gnu/bits/string.h:
-
-/usr/include/i386-linux-gnu/bits/string2.h:
 
 xchat.h:
 
@@ -284,10 +274,6 @@ history.h:
 /usr/include/openssl/srtp.h:
 
 /usr/include/libintl.h:
-
-/usr/include/locale.h:
-
-/usr/include/i386-linux-gnu/bits/locale.h:
 
 modes.h:
 

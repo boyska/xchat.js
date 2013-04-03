@@ -10,18 +10,15 @@ util.o: util.c /usr/include/stdio.h /usr/include/features.h \
  /usr/include/_G_config.h /usr/include/wchar.h \
  /usr/lib/gcc/i486-linux-gnu/4.7/include/stdarg.h \
  /usr/include/i386-linux-gnu/bits/stdio_lim.h \
- /usr/include/i386-linux-gnu/bits/sys_errlist.h \
- /usr/include/i386-linux-gnu/bits/stdio.h /usr/include/unistd.h \
+ /usr/include/i386-linux-gnu/bits/sys_errlist.h /usr/include/unistd.h \
  /usr/include/i386-linux-gnu/bits/posix_opt.h \
  /usr/include/i386-linux-gnu/bits/environments.h \
  /usr/include/i386-linux-gnu/bits/confname.h /usr/include/getopt.h \
- /usr/include/string.h /usr/include/xlocale.h \
- /usr/include/i386-linux-gnu/bits/string.h \
- /usr/include/i386-linux-gnu/bits/string2.h /usr/include/endian.h \
- /usr/include/i386-linux-gnu/bits/endian.h \
- /usr/include/i386-linux-gnu/bits/byteswap.h /usr/include/stdlib.h \
+ /usr/include/string.h /usr/include/xlocale.h /usr/include/stdlib.h \
  /usr/include/i386-linux-gnu/bits/waitflags.h \
- /usr/include/i386-linux-gnu/bits/waitstatus.h \
+ /usr/include/i386-linux-gnu/bits/waitstatus.h /usr/include/endian.h \
+ /usr/include/i386-linux-gnu/bits/endian.h \
+ /usr/include/i386-linux-gnu/bits/byteswap.h \
  /usr/include/i386-linux-gnu/sys/types.h /usr/include/time.h \
  /usr/include/i386-linux-gnu/sys/select.h \
  /usr/include/i386-linux-gnu/bits/select.h \
@@ -79,8 +76,7 @@ util.o: util.c /usr/include/stdio.h /usr/include/features.h \
  /usr/include/openssl/ssl2.h /usr/include/openssl/ssl3.h \
  /usr/include/openssl/tls1.h /usr/include/openssl/dtls1.h \
  /usr/include/openssl/pqueue.h /usr/include/openssl/ssl23.h \
- /usr/include/openssl/srtp.h /usr/include/libintl.h /usr/include/locale.h \
- /usr/include/i386-linux-gnu/bits/locale.h xchatc.h \
+ /usr/include/openssl/srtp.h /usr/include/libintl.h xchatc.h \
  /usr/include/glib-2.0/glib/gmarkup.h /usr/include/ctype.h util.h inet.h \
  /usr/include/i386-linux-gnu/sys/socket.h \
  /usr/include/i386-linux-gnu/sys/uio.h \
@@ -124,8 +120,6 @@ util.o: util.c /usr/include/stdio.h /usr/include/features.h \
 
 /usr/include/i386-linux-gnu/bits/sys_errlist.h:
 
-/usr/include/i386-linux-gnu/bits/stdio.h:
-
 /usr/include/unistd.h:
 
 /usr/include/i386-linux-gnu/bits/posix_opt.h:
@@ -140,21 +134,17 @@ util.o: util.c /usr/include/stdio.h /usr/include/features.h \
 
 /usr/include/xlocale.h:
 
-/usr/include/i386-linux-gnu/bits/string.h:
+/usr/include/stdlib.h:
 
-/usr/include/i386-linux-gnu/bits/string2.h:
+/usr/include/i386-linux-gnu/bits/waitflags.h:
+
+/usr/include/i386-linux-gnu/bits/waitstatus.h:
 
 /usr/include/endian.h:
 
 /usr/include/i386-linux-gnu/bits/endian.h:
 
 /usr/include/i386-linux-gnu/bits/byteswap.h:
-
-/usr/include/stdlib.h:
-
-/usr/include/i386-linux-gnu/bits/waitflags.h:
-
-/usr/include/i386-linux-gnu/bits/waitstatus.h:
 
 /usr/include/i386-linux-gnu/sys/types.h:
 
@@ -345,10 +335,6 @@ history.h:
 /usr/include/openssl/srtp.h:
 
 /usr/include/libintl.h:
-
-/usr/include/locale.h:
-
-/usr/include/i386-linux-gnu/bits/locale.h:
 
 xchatc.h:
 

@@ -82,7 +82,7 @@ AM_RECURSIVE_TARGETS = $(RECURSIVE_TARGETS:-recursive=) \
 	distdir
 ETAGS = etags
 CTAGS = ctags
-DIST_SUBDIRS = pixmaps common fe-gtk fe-text
+DIST_SUBDIRS = pixmaps common fe-gtk
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 am__relativize = \
   dir0=`pwd`; \
@@ -317,12 +317,8 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 unamepath = @unamepath@
 xchatlibdir = @xchatlibdir@
-EXTRA_DIST = fe-text/fe-text.c \
-	fe-text/README fe-text/fe-text.h version-script
-
-@DO_TEXT_TRUE@text_fe = fe-text
 @DO_GTK_TRUE@gtk_fe = fe-gtk
-SUBDIRS = pixmaps common $(gtk_fe) $(text_fe)
+SUBDIRS = pixmaps common $(gtk_fe)
 all: all-recursive
 
 .SUFFIXES:

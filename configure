@@ -670,8 +670,6 @@ DO_PERL_FALSE
 DO_PERL_TRUE
 DO_GTK_FALSE
 DO_GTK_TRUE
-DO_TEXT_FALSE
-DO_TEXT_TRUE
 USE_LIBSEXY_FALSE
 USE_LIBSEXY_TRUE
 USE_OPENSSL_FALSE
@@ -19698,14 +19696,6 @@ else
   USE_LIBSEXY_FALSE=
 fi
 
- if test "x$textfe" = "xyes"; then
-  DO_TEXT_TRUE=
-  DO_TEXT_FALSE='#'
-else
-  DO_TEXT_TRUE='#'
-  DO_TEXT_FALSE=
-fi
-
  if test "x$gtkfe" = "xyes"; then
   DO_GTK_TRUE=
   DO_GTK_FALSE='#'
@@ -20429,7 +20419,7 @@ _ACEOF
 xchatlibdir=${libdir}/xchat
 
 
-ac_config_files="$ac_config_files Makefile src/Makefile src/common/Makefile src/common/dbus/Makefile src/fe-text/Makefile src/fe-gtk/Makefile src/pixmaps/Makefile plugins/Makefile plugins/python/Makefile plugins/perl/Makefile plugins/tcl/Makefile intl/Makefile po/Makefile.in"
+ac_config_files="$ac_config_files Makefile src/Makefile src/common/Makefile src/common/dbus/Makefile src/fe-gtk/Makefile src/pixmaps/Makefile plugins/Makefile plugins/python/Makefile plugins/perl/Makefile plugins/tcl/Makefile intl/Makefile po/Makefile.in"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -20570,10 +20560,6 @@ Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${USE_LIBSEXY_TRUE}" && test -z "${USE_LIBSEXY_FALSE}"; then
   as_fn_error $? "conditional \"USE_LIBSEXY\" was never defined.
-Usually this means the macro was only invoked conditionally." "$LINENO" 5
-fi
-if test -z "${DO_TEXT_TRUE}" && test -z "${DO_TEXT_FALSE}"; then
-  as_fn_error $? "conditional \"DO_TEXT\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${DO_GTK_TRUE}" && test -z "${DO_GTK_FALSE}"; then
@@ -21492,7 +21478,6 @@ do
     "src/Makefile") CONFIG_FILES="$CONFIG_FILES src/Makefile" ;;
     "src/common/Makefile") CONFIG_FILES="$CONFIG_FILES src/common/Makefile" ;;
     "src/common/dbus/Makefile") CONFIG_FILES="$CONFIG_FILES src/common/dbus/Makefile" ;;
-    "src/fe-text/Makefile") CONFIG_FILES="$CONFIG_FILES src/fe-text/Makefile" ;;
     "src/fe-gtk/Makefile") CONFIG_FILES="$CONFIG_FILES src/fe-gtk/Makefile" ;;
     "src/pixmaps/Makefile") CONFIG_FILES="$CONFIG_FILES src/pixmaps/Makefile" ;;
     "plugins/Makefile") CONFIG_FILES="$CONFIG_FILES plugins/Makefile" ;;

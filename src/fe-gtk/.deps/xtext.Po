@@ -536,7 +536,7 @@ xtext.o: xtext.c /usr/include/string.h /usr/include/features.h \
  /usr/include/gtk-2.0/gtk/gtkoptionmenu.h \
  /usr/include/gtk-2.0/gtk/gtkpreview.h \
  /usr/include/gtk-2.0/gtk/gtktipsquery.h \
- /usr/include/gtk-2.0/gtk/gtkmarshal.h \
+ /usr/include/gtk-2.0/gtk/gtkmarshal.h WebView.h \
  /usr/include/webkitgtk-1.0/webkit/webkit.h \
  /usr/include/webkitgtk-1.0/webkit/webkitversion.h \
  /usr/include/webkitgtk-1.0/webkit/webkitdefines.h \
@@ -760,12 +760,17 @@ xtext.o: xtext.c /usr/include/string.h /usr/include/features.h \
  /usr/include/webkitgtk-1.0/webkit/webkitwebpolicydecision.h \
  /usr/include/webkitgtk-1.0/webkit/webkitwebresource.h \
  /usr/include/webkitgtk-1.0/webkit/webkitwebwindowfeatures.h \
- ../../config.h /usr/include/gtk-2.0/gdk/gdkx.h \
- /usr/include/gtk-2.0/gdk/gdkprivate.h /usr/include/X11/Xlib.h \
- /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h \
- /usr/include/X11/Xosdefs.h /usr/include/X11/Xutil.h \
- /usr/include/X11/keysym.h /usr/include/X11/keysymdef.h \
- /usr/include/X11/Xatom.h mmx_cmod.h xtext.h
+ /usr/include/webkitgtk-1.0/JavaScriptCore/JavaScript.h \
+ /usr/include/webkitgtk-1.0/JavaScriptCore/JSContextRef.h \
+ /usr/include/webkitgtk-1.0/JavaScriptCore/JSObjectRef.h \
+ /usr/include/webkitgtk-1.0/JavaScriptCore/JSValueRef.h \
+ /usr/include/webkitgtk-1.0/JavaScriptCore/WebKitAvailability.h \
+ /usr/include/webkitgtk-1.0/JavaScriptCore/JSStringRef.h ../../config.h \
+ /usr/include/gtk-2.0/gdk/gdkx.h /usr/include/gtk-2.0/gdk/gdkprivate.h \
+ /usr/include/X11/Xlib.h /usr/include/X11/X.h \
+ /usr/include/X11/Xfuncproto.h /usr/include/X11/Xosdefs.h \
+ /usr/include/X11/Xutil.h /usr/include/X11/keysym.h \
+ /usr/include/X11/keysymdef.h /usr/include/X11/Xatom.h mmx_cmod.h xtext.h
 
 /usr/include/string.h:
 
@@ -1987,6 +1992,8 @@ xtext.o: xtext.c /usr/include/string.h /usr/include/features.h \
 
 /usr/include/gtk-2.0/gtk/gtkmarshal.h:
 
+WebView.h:
+
 /usr/include/webkitgtk-1.0/webkit/webkit.h:
 
 /usr/include/webkitgtk-1.0/webkit/webkitversion.h:
@@ -2444,6 +2451,18 @@ xtext.o: xtext.c /usr/include/string.h /usr/include/features.h \
 /usr/include/webkitgtk-1.0/webkit/webkitwebresource.h:
 
 /usr/include/webkitgtk-1.0/webkit/webkitwebwindowfeatures.h:
+
+/usr/include/webkitgtk-1.0/JavaScriptCore/JavaScript.h:
+
+/usr/include/webkitgtk-1.0/JavaScriptCore/JSContextRef.h:
+
+/usr/include/webkitgtk-1.0/JavaScriptCore/JSObjectRef.h:
+
+/usr/include/webkitgtk-1.0/JavaScriptCore/JSValueRef.h:
+
+/usr/include/webkitgtk-1.0/JavaScriptCore/WebKitAvailability.h:
+
+/usr/include/webkitgtk-1.0/JavaScriptCore/JSStringRef.h:
 
 ../../config.h:
 

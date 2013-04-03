@@ -53,8 +53,62 @@ void w_printaraw(char* s){
 }
 
 
+/*
 void w_printline(linetype type, char* text, char* nickname){
 
+
+}
+*/
+
+
+char* palette[6]={"#E01B6A", "#7E1BE0","#1B7EE0","#1BE070","#D6E01B", "#E05D1B" };
+int nickbycolor(char* n){ /*XXX: la roba piu' scema del mondo, inserire i colori personalizzati, hash a modo del nick etc etc*/
+    int i = 0, sum = 0;
+    while (n[i])
+      sum += n[i++];
+   return sum%6;
+}
+
+
+void w_printpartjoin(char* n, char * s, char* stamp){
+    if(context==NULL) create_wview();
+    JSStringRef chanmsg= JSStringCreateWithUTF8CString("w_linepjoin");
+    JSValueRef  arguments[3];
+    JSValueRef result;
+    int num_arguments = 3;
+    JSStringRef string = JSStringCreateWithUTF8CString((const char *)s);
+    JSStringRef nick = JSStringCreateWithUTF8CString((const char *)n);
+    JSStringRef timero = JSStringCreateWithUTF8CString(stamp?stamp:"none");
+    arguments[0] = JSValueMakeString(context,nick);
+    arguments[1] = JSValueMakeString(context,string);
+    arguments[2] = JSValueMakeString(context,timero);
+    JSObjectRef functionObject = (JSObjectRef)JSObjectGetProperty(context, globalobj,chanmsg, NULL);
+    result = JSObjectCallAsFunction(context, functionObject, globalobj, num_arguments, arguments, NULL);
+}
+
+//function(t,c,n,s)
+void w_printchanmsg(char* n, char* s,char* stamp,int action, int high){
+    if(context==NULL) create_wview();
+    JSStringRef chanmsg= JSStringCreateWithUTF8CString("w_linechanmsg");
+    JSValueRef  arguments[6];
+    JSValueRef result;
+    int num_arguments = 6;
+    //ci strippo via gli ansii cazzi colorazzi perche' spaccano la JSValueMakeString
+    JSStringRef string = JSStringCreateWithUTF8CString((const char *)s);
+    JSStringRef nick = JSStringCreateWithUTF8CString((const char *)n);
+    int colnum=nickbycolor(n);
+    char* colorozzo=palette[colnum];
+    JSStringRef color = JSStringCreateWithUTF8CString((const char *)colorozzo);
+    JSStringRef timero = JSStringCreateWithUTF8CString(stamp?stamp:"none");
+    arguments[0] = JSValueMakeString(context,timero);
+    arguments[1] = JSValueMakeString(context,color);
+    arguments[2] = JSValueMakeString(context,nick);
+    arguments[3] = JSValueMakeString(context,string);
+    arguments[4] = JSValueMakeBoolean(context,action);
+    arguments[5] = JSValueMakeBoolean(context,high);
+
+    JSObjectRef functionObject = (JSObjectRef)JSObjectGetProperty(context, globalobj,chanmsg, NULL);
+    result = JSObjectCallAsFunction(context, functionObject, globalobj, num_arguments, arguments, NULL);
 
 }
 
@@ -77,6 +131,8 @@ WebKitNavigationResponse click_callback(WebKitWebView* web_view,WebKitWebFrame* 
 
 
 
+
+
 void create_wview(){
     if(!CREATED){ //XXX: Gestire a modo l'init e non a caso come adesso.
     webView = webkit_web_view_new();
@@ -88,7 +144,7 @@ void create_wview(){
     exit(-1);
     }
     sprintf(path,"%s.html",path);
-     webkit_web_view_open(WEBKIT_WEB_VIEW(webView), path);
+    webkit_web_view_open(WEBKIT_WEB_VIEW(webView), path);
     //g_signal_connect(G_OBJECT(webView),"navigation-requested",G_CALLBACK(click_callback),NULL);
 
     gtk_widget_show (webView);

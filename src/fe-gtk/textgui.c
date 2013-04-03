@@ -122,8 +122,8 @@ PrintTextRaw (void *xtbuf, unsigned char *text, int indent, time_t stamp)
 {
 
 	//XXX: prova di merda
-	fprintf(stderr,"[PrintTextRaw] %s\n",strip_color(text,strlen(text), STRIP_ALL));
-	w_printaraw(text);
+	//fprintf(stderr,"[PrintTextRaw] %s\n",strip_color(text,strlen(text), STRIP_ALL));
+	//w_printaraw(text);
 	char *last_text = text;
 	int len = 0;
 	int beep_done = FALSE;

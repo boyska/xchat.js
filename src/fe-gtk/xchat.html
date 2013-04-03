@@ -44,7 +44,7 @@ p {
 
 .nick {
     display: inline-block;
-    width: 100px;
+    width: 80px;
     text-align: right;
     padding-right: 10px;
     font-weight: bold;
@@ -91,15 +91,27 @@ p.partjoin .partjoin:before {
     content: "*** ";
 }
 
-
+p.high {
+    color: #FF0000;
+}
+p.high span.msg{
+    color: #FF0000;
+}
+p.partjoin span.msg{
+    color: #999;
+}
 </style>
 <!-- tutta la path policy e' da rivedere -->
 <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="jquery.scrollTo.min.js"></script>
 <script type="text/javascript">
 templates={
-    raw:'<div class="line" id="l{counter}">{text}</div>',
-    server: '<div class="line server" id="l{counter}">{text}</div>',
+    raw:'<p class="line" id="l{counter}">{text}</p>',
+    pjoin: '<p class="line partjoin" id="l{counter}"><span class="nick partjoin">{nickname}</span><span class="msg">({text})</span></p>',
+    ptjoin: '<p class="line partjoin" id="l{counter}"><span class="time">{time}</span><span class="nick partjoin">{nickname}</span><span class="msg">({text})</span></p>',
+    server: '<p class="line server" id="l{counter}">{text}</p>',
+    chantmsg:'<p class="line{classa}" id="l{counter}"><span class="time">{time}</span><span class="nick" style="color: {color};">{nickname}</span> <span class="msg">{text}</span></p>',
+    chanmsg: '<p class="line{classa}" id="l{counter}"><span class="nick" style="color: {color};">{nickname}</span> <span class="msg">{text}</span></p>',
 }
 
 function parses(tmpl,s) {
@@ -109,6 +121,16 @@ function parses(tmpl,s) {
         tmpl = tmpl.replace(rex,s[p]); }
     return tmpl;
 }
+
+
+function rendertxt(text) {
+    text = text.replace(/(https?:\/\/[^ ]*?)(<|$|\s)/g, '<a href="$1">$1</a>$2')
+    text = text.replace(/>(http.*?(png|gif|jpg|jpeg))<\/a>/g, '><img style="width: 60px; border: 0px; -moz-border-radius: 5px; border-radius: 5px;" src="$1" onmouseover="showtrail(\'$1\');" onmouseout="hidetrail();" onclick="hidetrail();"/></a>')
+    return text
+}
+
+
+
 
 function Xchat(){
     var cr= 0
@@ -124,6 +146,21 @@ function Xchat(){
     this.clear=function(){$("#irc").html("");}
     this.printaraw=   function(s){ $("#irc").append(parses(templates.raw,{counter:counter(),text:s})); funct.scroll(); }
     this.printaserver=function(s){ $("#irc").append(parses(templates.server,{counter:counter(),text:s})); funct.scroll(); }
+    this.printachanmsg=function(t,c,n,s,a,h){
+        var templo;
+        var classona=""
+        if(t!="none"){templo=templates.chantmsg}
+        else {templo=templates.chanmsg}
+        if(a) classona=classona+" action"
+        if(h) {classona=classona+" high", c="#FF0000";}
+        $("#irc").append(parses(templo,{counter:counter(),text:rendertxt(s),classa:classona,color:c,time:t,nickname:n})); funct.scroll();
+    }
+    this.printpjoin=  function(n,s,t){
+        var templo=templates.pjoin;
+        if(t!="none"){templo=templates.ptjoin;}
+
+        $("#irc").append(parses(templo,{counter:counter(),nickname:n,text:rendertxt(s),time:t})); funct.scroll();
+    }
 
 }
 
@@ -132,18 +169,21 @@ xchat= new Xchat();
 w_lineraw=xchat.printaraw;
 w_lineserver=xchat.printaserver;
 w_clear=xchat.clear;
-
+w_linechanmsg=xchat.printachanmsg;
+w_linepjoin=xchat.printpjoin;
 </script>
 
 </head>
 <body>
 <div class="container">
 <h1>TEST Locale</h1>
-<p class="line" id="it1">UNO</p>
+<!--<p class="line" id="it1">UNO</p>
 <p class="line" id="it2">DUE</p>
 <p class="line" id="it3">TRE</p>
 <p class="line" id="it4">QUATTRO</p>
-<p class="msg"><span class="time">14:55:52</span> <span class="nick" style="color: rgb(118, 149, 70);">Petonio</span> <span class="msg">come quando fuori piove.</span></p>
+<p class="msg"><span class="time">14:55:52</span> <span class="nick" style="color: rgb(118, 149, 70);">Petonio</span> <span class="msg">come quando fuori piove.</span></p> -->
+<div style="display: none; position: absolute; z-index: 110; left: 400; top: 100; width: 15; height: 15" id="preview_div"></div>
+
 <div id="irc">
 
 </div>
