@@ -3,10 +3,10 @@
 //#include "WebView.h"
 #include <gtk/gtkwidget.h>
 
-struct WebChatController {
+typedef struct WebChatController {
 	GtkWidget* view;
 	/* TODO: separate the DOM */
-} ;
+} WebChatController;
 
 //this typedef is to keep the core more ui-generic
 //if you want to change the "chat part", just avoid including Web*.h,
@@ -15,7 +15,7 @@ struct WebChatController {
 typedef struct WebChatController UIChat;
 
 //ricorda:i metodi pubblici sono di tipo uichat_*, non webchat_*
-UIChat uichat_new();
+UIChat *uichat_new(char *from, int type);
 void uichat_add_msg(char* from, char* msg);
 void uichat_destroy(UIChat*);
 //TODO: enum per il tipo dei messaggi

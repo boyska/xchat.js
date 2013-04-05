@@ -180,6 +180,9 @@ extern GdkPixmap *channelwin_pix;
 extern GdkPixmap *dialogwin_pix;
 
 
+#include "webcontroller.h"
+
+
 #ifdef USE_GTKSPELL
 char *SPELL_ENTRY_GET_TEXT (GtkWidget *entry);
 #define SPELL_ENTRY_SET_TEXT(e,txt) gtk_text_buffer_set_text (gtk_text_view_get_buffer(GTK_TEXT_VIEW(e)),txt,-1);
