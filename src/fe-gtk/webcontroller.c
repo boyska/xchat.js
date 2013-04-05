@@ -1,15 +1,17 @@
 #include <stdlib.h>
 #include <string.h>
 #include <webkit/webkit.h>
+#include <JavaScriptCore/JavaScript.h>
 #include "webcontroller.h"
 #include "WebView.h"
-
-static GtkWidget* create_webview(void);
+#include "../common/textenums.h"
+void create_webview(WebChatController *);
 
 UIChat *uichat_new(char *from, int type) {
 	WebChatController *controller = malloc(sizeof(WebChatController));
 	GtkWidget *label;
-	controller->view = (GtkWidget*) create_webview();
+    /* glielo passo come argomento perche' inizializza' un bel po di roba*/	
+    create_webview(controller);
 	label = from ? gtk_label_new(from) : NULL;
 
 	printf("CHAT creato view per %s\n", from);
@@ -21,9 +23,92 @@ UIChat *uichat_new(char *from, int type) {
 	return controller;
 }
 
-void uichat_add_msg(UIChat *chat, char* from, char* msg) {
-	printf("Dovrei aggiungere messaggi da %s che dice '%s' ma sono pigrissimo", from, msg);
-	return;
+
+
+char* palette[6]={"#E01B6A", "#7E1BE0","#1B7EE0","#1BE070","#D6E01B", "#E05D1B" };
+int nickbycolor(char* n){ /*XXX: la roba piu' scema del mondo, inserire i colori personalizzati, hash a modo del nick etc etc*/
+    int i = 0, sum = 0;
+    while (n[i])
+      sum += n[i++];
+   return sum%6;
+}
+
+
+
+void w_printpartjoin(UIChat *chat,char* n, char * s, char* stamp){
+    JSStringRef chanmsg= JSStringCreateWithUTF8CString("w_linepjoin");
+    JSValueRef  arguments[3];
+    JSValueRef result;
+    int num_arguments = 3;
+    JSStringRef string = JSStringCreateWithUTF8CString((const char *)s);
+    JSStringRef nick = JSStringCreateWithUTF8CString((const char *)n);
+    JSStringRef timero = JSStringCreateWithUTF8CString(stamp?stamp:"none");
+    arguments[0] = JSValueMakeString(chat->context,nick);
+    arguments[1] = JSValueMakeString(chat->context,string);
+    arguments[2] = JSValueMakeString(chat->context,timero);
+    JSObjectRef functionObject = (JSObjectRef)JSObjectGetProperty(chat->context, chat->globalobj,chanmsg, NULL);
+    result = JSObjectCallAsFunction(chat->context, functionObject, chat->globalobj, num_arguments, arguments, NULL);
+}
+
+void w_printchanmsg(UIChat *chat,char* n, char* s,char* stamp,int action, int high){
+    JSStringRef chanmsg= JSStringCreateWithUTF8CString("w_linechanmsg");
+    JSValueRef  arguments[6];
+    JSValueRef result;
+    int num_arguments = 6;
+    JSStringRef string = JSStringCreateWithUTF8CString((const char *)s);
+    JSStringRef nick = JSStringCreateWithUTF8CString((const char *)n);
+    int colnum=nickbycolor(n);
+    char* colorozzo=palette[colnum];
+    JSStringRef color = JSStringCreateWithUTF8CString((const char *)colorozzo);
+    JSStringRef timero = JSStringCreateWithUTF8CString(stamp?stamp:"none");
+    arguments[0] = JSValueMakeString(chat->context,timero);
+    arguments[1] = JSValueMakeString(chat->context,color);
+    arguments[2] = JSValueMakeString(chat->context,nick);
+    arguments[3] = JSValueMakeString(chat->context,string);
+    arguments[4] = JSValueMakeBoolean(chat->context,action);
+    arguments[5] = JSValueMakeBoolean(chat->context,high);
+
+    JSObjectRef functionObject = (JSObjectRef)JSObjectGetProperty(chat->context, chat->globalobj,chanmsg, NULL);
+    result = JSObjectCallAsFunction(chat->context, functionObject, chat->globalobj, num_arguments, arguments, NULL);
+
+}
+
+
+
+
+void uichat_add_msg(UIChat *chat, char* from, char* msg,int index,char* stamp) {
+
+	switch (index)
+	{
+	case XP_TE_JOIN:
+	case XP_TE_PART:
+	case XP_TE_PARTREASON:
+	case XP_TE_QUIT:
+		w_printpartjoin(chat,from,msg,stamp);
+		break;
+
+	/* ===Private message=== */
+	case XP_TE_PRIVMSG:
+	case XP_TE_DPRIVMSG:
+	case XP_TE_PRIVACTION:
+	case XP_TE_DPRIVACTION:
+        //TODO: da capire se serve una nuova chat, se e' già fatta etc. (all'interno basta usare channel message poi)
+        2+2;
+		break;
+
+	/* ===Highlighted message=== */
+	case XP_TE_HCHANACTION:
+	case XP_TE_HCHANMSG:
+	    w_printchanmsg(chat,from,msg,stamp,index==XP_TE_HCHANACTION,true);
+		break;
+
+	/* ===Channel message=== */
+	case XP_TE_CHANACTION:
+	case XP_TE_CHANMSG:
+		w_printchanmsg(chat,from,msg,stamp,index==XP_TE_CHANACTION,false);
+		break;
+	}
+
 }
 
 void uichat_destroy(UIChat *chat) {
@@ -31,7 +116,28 @@ void uichat_destroy(UIChat *chat) {
 	return;
 }
 
-static GtkWidget* create_webview() {
+
+
+/*
+XXX: se l'uri e' del tipo file:/// per adesso uso la policy di default
+da riguardare.
+Negli altri casi apro l'uri nel browser con lo stesso metodo di xchat originale.
+Inoltre maschero il click per evitare che ci vada anche la webview
+*/
+WebKitNavigationResponse click_callback(WebKitWebView* web_view,WebKitWebFrame* frame,WebKitNetworkRequest *request,gpointer user_data){
+    const char *new_uri =   webkit_network_request_get_uri(request);
+    int result=strncmp(new_uri,"file",4);
+    if(result!=0){
+        fe_open_url(new_uri);
+        return WEBKIT_NAVIGATION_RESPONSE_IGNORE;
+    }
+    else
+        return WEBKIT_NAVIGATION_RESPONSE_ACCEPT;
+}
+
+
+
+void create_webview(WebChatController* controller) {
 	GtkWidget *webView = webkit_web_view_new();
 	//XXX: gestire a modino tutti i path (locali?) della roba (html,js,css)
 	char path[PATH_MAX];
@@ -42,19 +148,18 @@ static GtkWidget* create_webview() {
 	}
 	sprintf(path,"%s.html",path);
 	webkit_web_view_open(WEBKIT_WEB_VIEW(webView), path);
-	//g_signal_connect(G_OBJECT(webView),"navigation-requested",G_CALLBACK(click_callback),NULL);
+	g_signal_connect(G_OBJECT(webView),"navigation-requested",G_CALLBACK(click_callback),NULL);
 
 	gtk_widget_show (webView);
-	WebKitWebFrame *frame = webkit_web_view_get_main_frame(WEBKIT_WEB_VIEW(webView));
-	JSGlobalContextRef context = webkit_web_frame_get_global_context(frame);
-	JSObjectRef globalobj= JSContextGetGlobalObject(context);
+	controller->frame = webkit_web_view_get_main_frame(WEBKIT_WEB_VIEW(webView));
+	controller->context = webkit_web_frame_get_global_context(controller->frame);
+	controller->globalobj= JSContextGetGlobalObject(controller->context);
 	//incastro la webview vera in una scrolled windows cosi' ho quello che mi aspetto dallo scrolling
-	GtkWidget *scrolledw = gtk_scrolled_window_new(NULL,NULL);
-	g_object_set (scrolledw, "shadow-type", GTK_SHADOW_IN, NULL);
+	controller->view = gtk_scrolled_window_new(NULL,NULL);
+	g_object_set (controller->view, "shadow-type", GTK_SHADOW_IN, NULL);
 
-	gtk_container_set_border_width (GTK_CONTAINER(scrolledw), 10);
-	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW(scrolledw),GTK_POLICY_AUTOMATIC,GTK_POLICY_ALWAYS);
-	gtk_container_add (GTK_CONTAINER(scrolledw), webView);
+	gtk_container_set_border_width (GTK_CONTAINER(controller->view), 10);
+	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW(controller->view),GTK_POLICY_AUTOMATIC,GTK_POLICY_ALWAYS);
+	gtk_container_add (GTK_CONTAINER(controller->view), webView);
 
-	return scrolledw;
 }

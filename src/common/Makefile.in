@@ -157,7 +157,7 @@ CCAS = @CCAS@
 CCASDEPMODE = @CCASDEPMODE@
 CCASFLAGS = @CCASFLAGS@
 CCDEPMODE = @CCDEPMODE@
-CFLAGS = @GUI_CFLAGS@
+CFLAGS = @CFLAGS@
 CFLAG_VISIBILITY = @CFLAG_VISIBILITY@
 COMMON_CFLAGS = @COMMON_CFLAGS@
 COMMON_LIBS = @COMMON_LIBS@
@@ -221,7 +221,7 @@ INTL_DEFAULT_VERBOSITY = @INTL_DEFAULT_VERBOSITY@
 INTL_LIBTOOL_SUFFIX_PREFIX = @INTL_LIBTOOL_SUFFIX_PREFIX@
 INTL_MACOSX_LIBS = @INTL_MACOSX_LIBS@
 LD = @LD@
-LDFLAGS = @LDFLAGS@ @GUI_LIBS@
+LDFLAGS = @LDFLAGS@
 LIBICONV = @LIBICONV@
 LIBINTL = @LIBINTL@
 LIBMULTITHREAD = @LIBMULTITHREAD@
@@ -436,7 +436,7 @@ $(am__aclocal_m4_deps):
 
 clean-noinstLIBRARIES:
 	-test -z "$(noinst_LIBRARIES)" || rm -f $(noinst_LIBRARIES)
-libxchatcommon.a: $(libxchatcommon_a_OBJECTS) $(libxchatcommon_a_DEPENDENCIES) $(EXTRA_libxchatcommon_a_DEPENDENCIES)
+libxchatcommon.a: $(libxchatcommon_a_OBJECTS) $(libxchatcommon_a_DEPENDENCIES) $(EXTRA_libxchatcommon_a_DEPENDENCIES) 
 	-rm -f libxchatcommon.a
 	$(libxchatcommon_a_AR) libxchatcommon.a $(libxchatcommon_a_OBJECTS) $(libxchatcommon_a_LIBADD)
 	$(RANLIB) libxchatcommon.a

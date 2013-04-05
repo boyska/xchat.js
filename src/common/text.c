@@ -1986,7 +1986,7 @@ text_emit (int index, session *sess, char *a, char *b, char *c, char *d)
 	unsigned int stripcolor_args = (prefs.stripcolor ? 0xFFFFFFFF : 0);
 	char tbuf[NICKLEN + 4];
 
-	fprintf(stderr,"TEXTEMIT:: A[%s] B[%s] C[%s] D[%s]\n",a,b,c,d);
+	//fprintf(stderr,"TEXTEMIT:: A[%s] B[%s] C[%s] D[%s]\n",a,b,c,d);
 	if (prefs.colorednicks && (index == XP_TE_CHANACTION || index == XP_TE_CHANMSG))
 	{
 		snprintf (tbuf, sizeof (tbuf), "\003%d%s", color_of (a), a);
@@ -2000,7 +2000,7 @@ text_emit (int index, session *sess, char *a, char *b, char *c, char *d)
 	word[3] = (c ? c : "\000");
 	word[4] = (d ? d : "\000");
 
-	fprintf(stderr,"TEXTEMIT:: W0[%s] W1[%s] W2[%s] W3[%s] W4[%s]\n",word[0],word[1],word[2],word[3],word[4]);
+	//fprintf(stderr,"TEXTEMIT:: W0[%s] W1[%s] W2[%s] W3[%s] W4[%s]\n",word[0],word[1],word[2],word[3],word[4]);
 	//if(index==XP_TE_CHANMSG){w_printchanmsg(word[1],word[2]);}
 	if (prefs.timestamp_logs){
 		len = get_stamp_str ("%R", time (0), &stamp);
@@ -2015,6 +2015,8 @@ text_emit (int index, session *sess, char *a, char *b, char *c, char *d)
 	if (!is_session (sess))
 		return;
 
+    
+    uichat_add_msg(sess->ui_chat,word[1],word[2],index,stamp);
 	switch (index)
 	{
 	case XP_TE_JOIN:
@@ -2022,7 +2024,7 @@ text_emit (int index, session *sess, char *a, char *b, char *c, char *d)
 	case XP_TE_PARTREASON:
 	case XP_TE_QUIT:
 /*        w_printpartjoin(word[1],word[2],stamp);*/
-		uichat_add_msg(sess->ui_chat, word[2], word[1]);
+		//uichat_add_msg(sess->ui_chat, word[2], word[1]);
 		/* implement ConfMode / Hide Join and Part Messages */
 		if (chanopt_is_set (prefs.confmode, sess->text_hidejoinpart))
 			return;
@@ -2046,7 +2048,7 @@ text_emit (int index, session *sess, char *a, char *b, char *c, char *d)
 	case XP_TE_HCHANACTION:
 	case XP_TE_HCHANMSG:
 /*        w_printchanmsg(word[1],word[2],stamp,index==XP_TE_HCHANACTION,true);*/
-		uichat_add_msg(sess->ui_chat, word[2], word[1]);
+		//uichat_add_msg(sess->ui_chat, word[2], word[1]);
 		if (chanopt_is_set_a (prefs.input_beep_hilight, sess->alert_beep))
 			sound_beep (sess);
 		if (chanopt_is_set_a (prefs.input_flash_hilight, sess->alert_taskbar))
@@ -2059,7 +2061,7 @@ text_emit (int index, session *sess, char *a, char *b, char *c, char *d)
 	case XP_TE_CHANACTION:
 	case XP_TE_CHANMSG:
 /*        w_printchanmsg(word[1],word[2],stamp,index==XP_TE_CHANACTION,false);*/
-		uichat_add_msg(sess->ui_chat, word[2], word[1]);
+		//uichat_add_msg(sess->ui_chat, word[2], word[1]);
 
 		if (chanopt_is_set_a (prefs.input_beep_chans, sess->alert_beep))
 			sound_beep (sess);
