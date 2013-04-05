@@ -324,8 +324,12 @@ struct xchatprefs
 #define SET_ON 1
 #define SET_DEFAULT 2 /* use global setting */
 
+typedef struct WebChatController UIChat;
+
 typedef struct session
 {
+	/* Per-channel ui chat */
+	UIChat *ui_chat;
 	/* Per-Channel Alerts */
 	/* use a byte, because we need a pointer to each element */
 	guint8 alert_beep;
