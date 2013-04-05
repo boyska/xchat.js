@@ -16,7 +16,7 @@ typedef struct WebChatController UIChat;
 
 //ricorda:i metodi pubblici sono di tipo uichat_*, non webchat_*
 UIChat *uichat_new(char *from, int type);
-void uichat_add_msg(char* from, char* msg);
+void uichat_add_msg(UIChat *chat, char* from, char* msg);
 void uichat_destroy(UIChat*);
 //TODO: enum per il tipo dei messaggi
 

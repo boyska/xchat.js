@@ -917,14 +917,11 @@ static int ul_tag = 0;
 static gboolean
 mg_populate_userlist (session *sess)
 {
-	session_gui *gui;
-
 	if (!sess)
 		sess = current_tab;
 
 	if (is_session (sess))
 	{
-		gui = sess->gui;
 		if (sess->type == SESS_DIALOG)
 			mg_set_access_icon (sess->gui, NULL, sess->server->is_away);
 		else
@@ -2828,7 +2825,7 @@ mg_inputbox_rightclick (GtkEntry *entry, GtkWidget *menu)
 static void
 mg_create_entry (session *sess, GtkWidget *box)
 {
-	GtkWidget *sw, *hbox, *but, *entry;
+	GtkWidget *hbox, *but, *entry;
 	session_gui *gui = sess->gui;
 
 	hbox = gtk_hbox_new (FALSE, 0);
@@ -3730,7 +3727,6 @@ mg_drag_motion_cb (GtkWidget *widget, GdkDragContext *context, int x, int y, gui
 	GdkGCValues val;
 	int half, width, height;
 	int ox, oy;
-	GtkPaned *paned;
 	GdkDrawable *draw;
 
 	/* ignore file drops */

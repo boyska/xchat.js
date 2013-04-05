@@ -349,6 +349,10 @@ session_new (server *serv, char *from, int type, int focus)
 	sess->scrollfd = -1;
 	sess->type = type;
 
+	printf("NUOVA SESSION\n");
+
+	sess->ui_chat = uichat_new(from, type);
+
 	sess->alert_beep = SET_DEFAULT;
 	sess->alert_taskbar = SET_DEFAULT;
 	sess->alert_tray = SET_DEFAULT;

@@ -2021,7 +2021,8 @@ text_emit (int index, session *sess, char *a, char *b, char *c, char *d)
 	case XP_TE_PART:
 	case XP_TE_PARTREASON:
 	case XP_TE_QUIT:
-		w_printpartjoin(word[1],word[2],stamp);
+/*        w_printpartjoin(word[1],word[2],stamp);*/
+		uichat_add_msg(sess->ui_chat, word[2], word[1]);
 		/* implement ConfMode / Hide Join and Part Messages */
 		if (chanopt_is_set (prefs.confmode, sess->text_hidejoinpart))
 			return;
@@ -2044,7 +2045,8 @@ text_emit (int index, session *sess, char *a, char *b, char *c, char *d)
 	/* ===Highlighted message=== */
 	case XP_TE_HCHANACTION:
 	case XP_TE_HCHANMSG:
-	    w_printchanmsg(word[1],word[2],stamp,index==XP_TE_HCHANACTION,true);
+/*        w_printchanmsg(word[1],word[2],stamp,index==XP_TE_HCHANACTION,true);*/
+		uichat_add_msg(sess->ui_chat, word[2], word[1]);
 		if (chanopt_is_set_a (prefs.input_beep_hilight, sess->alert_beep))
 			sound_beep (sess);
 		if (chanopt_is_set_a (prefs.input_flash_hilight, sess->alert_taskbar))
@@ -2056,7 +2058,8 @@ text_emit (int index, session *sess, char *a, char *b, char *c, char *d)
 	/* ===Channel message=== */
 	case XP_TE_CHANACTION:
 	case XP_TE_CHANMSG:
-		w_printchanmsg(word[1],word[2],stamp,index==XP_TE_CHANACTION,false);
+/*        w_printchanmsg(word[1],word[2],stamp,index==XP_TE_CHANACTION,false);*/
+		uichat_add_msg(sess->ui_chat, word[2], word[1]);
 
 		if (chanopt_is_set_a (prefs.input_beep_chans, sess->alert_beep))
 			sound_beep (sess);
