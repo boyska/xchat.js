@@ -941,7 +941,7 @@ mg_populate (session *sess)
 {
 	session_gui *gui = sess->gui;
 	restore_gui *res = sess->res;
-	int i, render = TRUE;
+	int i;
 	guint16 vis = gui->ul_hidden;
 
 	switch (sess->type)
@@ -981,10 +981,6 @@ mg_populate (session *sess)
 	if (gui->is_tab)
 		gtk_notebook_set_current_page (GTK_NOTEBOOK (gui->note_book), 0);
 
-	/* xtext size change? Then don't render, wait for the expose caused
-      by showing/hidding the userlist */
-	if (vis != gui->ul_hidden && gui->user_box->allocation.width > 1)
-		render = FALSE;
 
 	if (gui->is_tab)
 		gtk_widget_set_sensitive (gui->menu, TRUE);

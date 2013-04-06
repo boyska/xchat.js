@@ -38,6 +38,7 @@
 #include "outbound.h"
 #include "xchatc.h"
 #include "text.h"
+#include "../fe-gtk/webcontroller.h"
 #ifdef WIN32
 #include <windows.h>
 #endif

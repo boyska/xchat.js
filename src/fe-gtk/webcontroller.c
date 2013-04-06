@@ -20,8 +20,8 @@ void w_clear(){
 void create_wview(){
 	if(!chat_notebook) {
 		chat_notebook = gtk_notebook_new();
-		printf("notebook created. its address is %x\n", chat_notebook);
-		gtk_notebook_set_show_tabs(chat_notebook,FALSE);
+		printf("notebook created. its address is %p\n", chat_notebook);
+		gtk_notebook_set_show_tabs(GTK_NOTEBOOK(chat_notebook),FALSE);
 	}
 }
 
@@ -31,7 +31,7 @@ GtkWidget* get_wview_container(){
 
 void set_tab_by_index(gint i){ /* se esiste e' tutto bono visto che se sbaglio i non succede nulla*/
     if(chat_notebook) 
-        gtk_notebook_set_current_page(chat_notebook,i);
+        gtk_notebook_set_current_page(GTK_NOTEBOOK(chat_notebook),i);
 }
 
 
@@ -51,7 +51,7 @@ UIChat *uichat_new(char *from, int type) {
 		return controller;
 	if(from){ /* XXX: l'appendo solo se from!=NULL, serve crearlo in quel caso? investigare.*/
 	    controller->p_index=gtk_notebook_append_page((GtkNotebook*)get_wview_container(), controller->view, label /*widget for label*/);
-	    gtk_notebook_set_current_page(get_wview_container(), -1);
+	    gtk_notebook_set_current_page(GTK_NOTEBOOK(get_wview_container()), -1);
 	    gtk_widget_show_all(controller->view);
 	}
 	return controller;
@@ -127,7 +127,6 @@ void uichat_add_msg(UIChat *chat, char* from, char* msg,int index,char* stamp) {
 	case XP_TE_PRIVACTION:
 	case XP_TE_DPRIVACTION:
         //TODO: da capire se serve una nuova chat, se e' già fatta etc. (all'interno basta usare channel message poi)
-        2+2;
 		break;
 
 	/* ===Highlighted message=== */

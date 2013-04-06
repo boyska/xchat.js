@@ -11,7 +11,7 @@ typedef struct
 #include "fe-gtk.h"
 #include "maingui.h"
 
-#include <gdk/gdk.h>f
+#include <gdk/gdk.h>
 #include <gtk/gtktreeview.h>
 
 static void 	/* row-activated, when a row is double clicked */

@@ -48,6 +48,7 @@
 #include "text.h"
 #include "url.h"
 #include "xchatc.h"
+#include "../fe-gtk/webcontroller.h"
 
 #ifdef USE_OPENSSL
 #include <openssl/ssl.h>		  /* SSL_() */
