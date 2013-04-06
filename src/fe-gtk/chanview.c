@@ -400,8 +400,8 @@ chanview_get_box (chanview *cv)
 }
 
 void
-chanview_move_focus (chanview *cv, gboolean relative, int num)
-{
+chanview_move_focus (chanview *cv, gboolean relative, int num)  
+{fprintf(stderr,"\n1111111111111111OOOKKWKWKWKWKWK!\n\n");
 	cv->func_move_focus (cv, relative, num);
 }
 

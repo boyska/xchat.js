@@ -11,7 +11,7 @@ typedef struct
 #include "fe-gtk.h"
 #include "maingui.h"
 
-#include <gdk/gdk.h>
+#include <gdk/gdk.h>f
 #include <gtk/gtktreeview.h>
 
 static void 	/* row-activated, when a row is double clicked */
@@ -193,7 +193,7 @@ cv_tree_focus (chan *ch)
 	GdkRectangle cell_rect;
 	GdkRectangle vis_rect;
 	gint dest_y;
-
+	//fprintf(stderr,"\nPREMUTO!\n\n");
 	/* expand the parent node */
 	if (gtk_tree_model_iter_parent (model, &parent, &ch->iter))
 	{
@@ -243,6 +243,7 @@ cv_tree_focus (chan *ch)
 static void
 cv_tree_move_focus (chanview *cv, gboolean relative, int num)
 {
+    fprintf(stderr,"\nOOOKKWKWKWKWKWK!\n\n");
 	chan *ch;
 
 	if (relative)
@@ -359,6 +360,6 @@ cv_tree_is_collapsed (chan *ch)
 											  &parent->iter);
 	ret = !gtk_tree_view_row_expanded (((treeview *)parent->cv)->tree, path);
 	gtk_tree_path_free (path);
-	
+
 	return ret;
 }

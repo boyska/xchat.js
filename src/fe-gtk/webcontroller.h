@@ -1,6 +1,5 @@
 #ifndef WEBCONTROLLER_H
 #define WEBCONTROLLER_H
-//#include "WebView.h"
 #include <webkit/webkit.h>
 #include <JavaScriptCore/JavaScript.h>
 #include <gtk/gtkwidget.h>
@@ -11,6 +10,7 @@ typedef struct WebChatController {
     WebKitWebFrame* frame;
     JSGlobalContextRef context;
     JSObjectRef globalobj;
+    gint p_index; /* indice della pagina nel notebook */
 } WebChatController;
 
 //this typedef is to keep the core more ui-generic

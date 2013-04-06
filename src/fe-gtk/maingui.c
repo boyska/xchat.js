@@ -324,14 +324,14 @@ fe_set_tab_color (struct session *sess, int col)
 				server_sess->nick_said = FALSE;
 				chan_set_color (chan_get_parent (sess->res->tab), newdata_list);
 			}
-				
+
 			break;
 		case 2:	/* new message arrived in channel (light red) */
 			sess->new_data = FALSE;
 			sess->msg_said = TRUE;
 			sess->nick_said = FALSE;
 			chan_set_color (sess->res->tab, newmsg_list);
-			
+
 			if (chan_is_collapsed (sess->res->tab))
 			{
 				server_sess->new_data = FALSE;
@@ -339,7 +339,7 @@ fe_set_tab_color (struct session *sess, int col)
 				server_sess->nick_said = FALSE;
 				chan_set_color (chan_get_parent (sess->res->tab), newmsg_list);
 			}
-			
+
 			break;
 		case 3:	/* your nick has been seen (blue) */
 			sess->new_data = FALSE;
@@ -354,7 +354,7 @@ fe_set_tab_color (struct session *sess, int col)
 				server_sess->nick_said = TRUE;
 				chan_set_color (chan_get_parent (sess->res->tab), nickseen_list);
 			}
-				
+
 			break;
 		}
 	}
@@ -899,7 +899,7 @@ mg_decide_userlist (session *sess, gboolean switch_to_current)
 		else
 			mg_userlist_showhide (sess, FALSE);	/* hide */
 		break;
-	default:		
+	default:
 		mg_userlist_showhide (sess, TRUE);	/* show */
 	}
 }
@@ -1062,6 +1062,8 @@ mg_populate (session *sess)
 void
 mg_bring_tofront_sess (session *sess)	/* IRC tab or window */
 {
+		
+
 	if (sess->gui->is_tab)
 		chan_focus (sess->res->tab);
 	else
@@ -1083,8 +1085,10 @@ mg_bring_tofront (GtkWidget *vbox)	/* non-IRC tab or window */
 void
 mg_switch_page (int relative, int num)
 {
-	if (mg_gui)
+	if (mg_gui){
 		chanview_move_focus (mg_gui->chanview, relative, num);
+		fprintf(stderr,"\nPIGIOOOOOO!\n\n");
+	}
 }
 
 /* a toplevel IRC window was destroyed */
@@ -2022,7 +2026,7 @@ flagk_hit (GtkWidget * wid, struct session *sess)
 
 	if (serv->connected && sess->channel[0])
 	{
-		snprintf (modes, sizeof (modes), "-k %s", 
+		snprintf (modes, sizeof (modes), "-k %s",
 			  gtk_entry_get_text (GTK_ENTRY (sess->gui->key_entry)));
 
 		if (GTK_TOGGLE_BUTTON (wid)->active)
@@ -2111,7 +2115,7 @@ mg_limit_entry_cb (GtkWidget * igad, gpointer userdata)
 			gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (sess->gui->flag_l), FALSE);
 			return;
 		}
-		snprintf (modes, sizeof(modes), "+l %d", 
+		snprintf (modes, sizeof(modes), "+l %d",
 				atoi (gtk_entry_get_text (GTK_ENTRY (igad))));
 		serv->p_mode (serv, sess->channel, modes);
 		serv->p_join_info (serv, sess->channel);

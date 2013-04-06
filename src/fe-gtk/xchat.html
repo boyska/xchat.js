@@ -114,6 +114,7 @@ templates={
     chanmsg: '<p class="line{classa}" id="l{counter}"><span class="nick" style="color: {color};">{nickname}</span> <span class="msg">{text}</span></p>',
 }
 
+
 function parses(tmpl,s) {
     var rex;
     for (p in s) {
@@ -121,6 +122,18 @@ function parses(tmpl,s) {
         tmpl = tmpl.replace(rex,s[p]); }
     return tmpl;
 }
+
+function hasha(e){
+    for(var r=0,i=0;i<e.length;i++)
+    r=(r<<5)-r+e.charCodeAt(i),r&=r;
+    return r
+    }
+
+function stringtocol(s){
+    return ('#'+Math.abs(Math.floor(hasha(s)*16777215)).toString(16)).substr(0, 7);
+
+}
+
 
 
 function rendertxt(text) {
@@ -153,7 +166,7 @@ function Xchat(){
         else {templo=templates.chanmsg}
         if(a) classona=classona+" action"
         if(h) {classona=classona+" high", c="#FF0000";}
-        $("#irc").append(parses(templo,{counter:counter(),text:rendertxt(s),classa:classona,color:c,time:t,nickname:n})); funct.scroll();
+        $("#irc").append(parses(templo,{counter:counter(),text:rendertxt(s),classa:classona,color:stringtocol(n),time:t,nickname:n})); funct.scroll();
     }
     this.printpjoin=  function(n,s,t){
         var templo=templates.pjoin;

@@ -3,8 +3,40 @@
 #include <webkit/webkit.h>
 #include <JavaScriptCore/JavaScript.h>
 #include "webcontroller.h"
-#include "WebView.h"
 #include "../common/textenums.h"
+
+
+GtkWidget* chat_notebook = NULL;
+
+//TODO: definire una struttura js un po' piu' seria e cercare di fare le cose pulite
+/*
+void w_clear(){
+    //e' l'altro metodo, e' perfetto per tutta la roba che non ritorna
+    webkit_web_view_execute_script(WEBKIT_WEB_VIEW(webView),"w_clear();");
+    //in teoria funziona anche la open con javascript: come url
+
+}
+*/
+void create_wview(){
+	if(!chat_notebook) {
+		chat_notebook = gtk_notebook_new();
+		printf("notebook created. its address is %x\n", chat_notebook);
+		gtk_notebook_set_show_tabs(chat_notebook,FALSE);
+	}
+}
+
+GtkWidget* get_wview_container(){
+    return chat_notebook;
+}
+
+void set_tab_by_index(gint i){ /* se esiste e' tutto bono visto che se sbaglio i non succede nulla*/
+    if(chat_notebook) 
+        gtk_notebook_set_current_page(chat_notebook,i);
+}
+
+
+
+
 void create_webview(WebChatController *);
 
 UIChat *uichat_new(char *from, int type) {
@@ -17,9 +49,11 @@ UIChat *uichat_new(char *from, int type) {
 	printf("CHAT creato view per %s\n", from);
 	if(!get_wview_container())
 		return controller;
-	gtk_notebook_append_page((GtkNotebook*)get_wview_container(), controller->view, label /*widget for label*/);
-	gtk_notebook_set_current_page(get_wview_container(), -1);
-	gtk_widget_show_all(controller->view);
+	if(from){ /* XXX: l'appendo solo se from!=NULL, serve crearlo in quel caso? investigare.*/
+	    controller->p_index=gtk_notebook_append_page((GtkNotebook*)get_wview_container(), controller->view, label /*widget for label*/);
+	    gtk_notebook_set_current_page(get_wview_container(), -1);
+	    gtk_widget_show_all(controller->view);
+	}
 	return controller;
 }
 

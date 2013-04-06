@@ -48,9 +48,6 @@
 #include "maingui.h"
 #include "palette.h"
 #include "textgui.h"
-#include <webkit/webkit.h>
-#include <JavaScriptCore/JavaScript.h>
-#include "WebView.h"
 
 extern struct text_event te[];
 extern char *pntevts_text[];

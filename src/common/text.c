@@ -41,7 +41,6 @@
 #ifdef WIN32
 #include <windows.h>
 #endif
-#include "../fe-gtk/WebView.h"
 
 struct pevt_stage1
 {
@@ -2015,7 +2014,7 @@ text_emit (int index, session *sess, char *a, char *b, char *c, char *d)
 	if (!is_session (sess))
 		return;
 
-    
+
     uichat_add_msg(sess->ui_chat,word[1],word[2],index,stamp);
 	switch (index)
 	{

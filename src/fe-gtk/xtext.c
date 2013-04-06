@@ -49,7 +49,6 @@
 #include <gtk/gtkclipboard.h>
 #include <gtk/gtkversion.h>
 #include <gtk/gtkwindow.h>
-#include "WebView.h"
 
 
 #ifdef XCHAT
@@ -147,7 +146,6 @@ static int gtk_xtext_render_ents (GtkXText * xtext, textentry *, textentry *);
 static void gtk_xtext_recalc_widths (xtext_buffer *buf, int);
 static void gtk_xtext_fix_indent (xtext_buffer *buf);
 static int gtk_xtext_find_subline (GtkXText *xtext, textentry *ent, int line);
-static char *gtk_xtext_conv_color (unsigned char *text, int len, int *newlen);
 static unsigned char *
 gtk_xtext_strip_color (unsigned char *text, int len, unsigned char *outbuf,
 							  int *newlen, int *mb_ret, int strip_hidden);
@@ -1130,18 +1128,6 @@ gtk_xtext_size_allocate (GtkWidget * widget, GtkAllocation * allocation)
 		if (xtext->buffer->scrollbar_down)
 			gtk_adjustment_set_value (xtext->adj, xtext->adj->upper -
 											  xtext->adj->page_size);
-	}
-}
-
-static void
-gtk_xtext_selection_clear_full (xtext_buffer *buf)
-{
-	textentry *ent = buf->text_first;
-	while (ent)
-	{
-		ent->mark_start = -1;
-		ent->mark_end = -1;
-		ent = ent->next;
 	}
 }
 
@@ -2622,99 +2608,6 @@ gtk_xtext_strip_color (unsigned char *text, int len, unsigned char *outbuf,
 
 	if (mb_ret != NULL)
 		*mb_ret = mb;
-
-	return new_str;
-}
-
-/* GeEkMaN: converts mIRC control codes to literal control codes */
-
-static char *
-gtk_xtext_conv_color (unsigned char *text, int len, int *newlen)
-{
-	int i, j = 2;
-	char cchar = 0;
-	char *new_str;
-	int mbl;
-
-	for (i = 0; i < len;)
-	{
-		switch (text[i])
-		{
-		case ATTR_COLOR:
-		case ATTR_RESET:
-		case ATTR_REVERSE:
-		case ATTR_BOLD:
-		case ATTR_UNDERLINE:
-		case ATTR_ITALICS:
-		case ATTR_HIDDEN:
-			j += 3;
-			i++;
-			break;
-		default:
-			mbl = charlen (text + i);
-			j += mbl;
-			i += mbl;
-		}
-	}
-
-	new_str = malloc (j);
-	j = 0;
-
-	for (i = 0; i < len;)
-	{
-		switch (text[i])
-		{
-		case ATTR_COLOR:
-			cchar = 'C';
-			break;
-		case ATTR_RESET:
-			cchar = 'O';
-			break;
-		case ATTR_REVERSE:
-			cchar = 'R';
-			break;
-		case ATTR_BOLD:
-			cchar = 'B';
-			break;
-		case ATTR_UNDERLINE:
-			cchar = 'U';
-			break;
-		case ATTR_ITALICS:
-			cchar = 'I';
-			break;
-		case ATTR_HIDDEN:
-			cchar = 'H';
-			break;
-		case ATTR_BEEP:
-			break;
-		default:
-			mbl = charlen (text + i);
-			if (mbl == 1)
-			{
-				new_str[j] = text[i];
-				j++;
-				i++;
-			} else
-			{
-				/* invalid utf8 safe guard */
-				if (i + mbl > len)
-					mbl = len - i;
-				memcpy (new_str + j, text + i, mbl);
-				j += mbl;
-				i += mbl;
-			}
-		}
-		if (cchar != 0)
-		{
-			new_str[j++] = '%';
-			new_str[j++] = cchar;
-			cchar = 0;
-			i++;
-		}
-	}
-
-	new_str[j] = 0;
-	*newlen = j;
 
 	return new_str;
 }
@@ -4591,140 +4484,8 @@ gtk_xtext_render_page (GtkXText * xtext)
 }
 
 
-static void
-gtk_xtext_kill_ent (xtext_buffer *buffer, textentry *ent)
-{
-	if (ent == buffer->pagetop_ent)
-		buffer->pagetop_ent = NULL;
-
-	if (ent == buffer->last_ent_start)
-	{
-		buffer->last_ent_start = ent->next;
-		buffer->last_offset_start = 0;
-	}
-
-	if (ent == buffer->last_ent_end)
-	{
-		buffer->last_ent_start = NULL;
-		buffer->last_ent_end = NULL;
-	}
-
-	if (buffer->marker_pos == ent) buffer->marker_pos = NULL;
-
-	free (ent);
-}
-
-/* remove the topline from the list */
-
-static void
-gtk_xtext_remove_top (xtext_buffer *buffer)
-{
-	textentry *ent;
-
-	ent = buffer->text_first;
-	if (!ent)
-		return;
-	buffer->num_lines -= ent->lines_taken;
-	buffer->pagetop_line -= ent->lines_taken;
-	buffer->last_pixel_pos -= (ent->lines_taken * buffer->xtext->fontsize);
-	buffer->text_first = ent->next;
-	if (buffer->text_first)
-		buffer->text_first->prev = NULL;
-	else
-		buffer->text_last = NULL;
-
-	buffer->old_value -= ent->lines_taken;
-	if (buffer->xtext->buffer == buffer)	/* is it the current buffer? */
-	{
-		buffer->xtext->adj->value -= ent->lines_taken;
-		buffer->xtext->select_start_adj -= ent->lines_taken;
-	}
-
-	gtk_xtext_kill_ent (buffer, ent);
-}
-
-static void
-gtk_xtext_remove_bottom (xtext_buffer *buffer)
-{
-	textentry *ent;
-
-	ent = buffer->text_last;
-	if (!ent)
-		return;
-	buffer->num_lines -= ent->lines_taken;
-	buffer->text_last = ent->prev;
-	if (buffer->text_last)
-		buffer->text_last->next = NULL;
-	else
-		buffer->text_first = NULL;
-
-	gtk_xtext_kill_ent (buffer, ent);
-}
-
-
-static gboolean
-gtk_xtext_check_ent_visibility (GtkXText * xtext, textentry *find_ent, int add)
-{
-	textentry *ent;
-	int lines_max;
-	int line = 0;
-	int width;
-	int height;
-
-	gdk_drawable_get_size (GTK_WIDGET (xtext)->window, &width, &height);
-
-	lines_max = ((height + xtext->pixel_offset) / xtext->fontsize) + add;
-	ent = xtext->buffer->pagetop_ent;
-
-	while (ent && line < lines_max)
-	{
-		if (find_ent == ent)
-			return TRUE;
-		line += ent->lines_taken;
-		ent = ent->next;
-	}
-
-	return FALSE;
-}
-
-
-static int
-gtk_xtext_render_page_timeout (GtkXText * xtext)
-{
-	GtkAdjustment *adj = xtext->adj;
-
-	xtext->add_io_tag = 0;
-
-	/* less than a complete page? */
-	if (xtext->buffer->num_lines <= adj->page_size)
-	{
-		xtext->buffer->old_value = 0;
-		adj->value = 0;
-		gtk_xtext_render_page (xtext);
-	} else if (xtext->buffer->scrollbar_down)
-	{
-		g_signal_handler_block (xtext->adj, xtext->vc_signal_tag);
-		gtk_xtext_adjustment_set (xtext->buffer, FALSE);
-		gtk_adjustment_set_value (adj, adj->upper - adj->page_size);
-		g_signal_handler_unblock (xtext->adj, xtext->vc_signal_tag);
-		xtext->buffer->old_value = adj->value;
-		gtk_xtext_render_page (xtext);
-	} else
-	{
-		gtk_xtext_adjustment_set (xtext->buffer, TRUE);
-		if (xtext->indent_changed)
-		{
-			xtext->indent_changed = FALSE;
-			gtk_xtext_render_page (xtext);
-		}
-	}
-
-	return 0;
-}
-
 /* append a textentry to our linked list */
 
-static void gtk_xtext_append_entry (xtext_buffer *buf, textentry * ent, time_t stamp){}
 
 /* the main two public functions */
 
