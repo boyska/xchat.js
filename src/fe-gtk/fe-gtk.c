@@ -549,7 +549,6 @@ fe_notify_update (char *name)
 void
 fe_text_clear (struct session *sess, int lines)
 {
-	gtk_xtext_clear (sess->res->buffer, lines);
 }
 
 void
@@ -595,8 +594,6 @@ fe_progressbar_end (server *serv)
 void
 fe_print_text (struct session *sess, char *text, time_t stamp)
 {
-	PrintTextRaw (sess->res->buffer, (unsigned char *)text, prefs.indent_nicks, stamp);
-
 	if (!sess->new_data && sess != current_tab &&
 		 sess->gui->is_tab && !sess->nick_said && stamp == 0)
 	{
@@ -625,31 +622,6 @@ lastlog_regex_cmp (char *a, regex_t *reg)
 void
 fe_lastlog (session *sess, session *lastlog_sess, char *sstr, gboolean regexp)
 {
-#ifndef WIN32
-	regex_t reg;
-#endif
-
-	if (gtk_xtext_is_empty (sess->res->buffer))
-	{
-		PrintText (lastlog_sess, _("Search buffer is empty.\n"));
-		return;
-	}
-
-	if (!regexp)
-	{
-		gtk_xtext_lastlog (lastlog_sess->res->buffer, sess->res->buffer,
-								 (void *) nocasestrstr, sstr);
-		return;
-	}
-
-#ifndef WIN32
-	if (regcomp (&reg, sstr, REG_ICASE | REG_EXTENDED | REG_NOSUB) == 0)
-	{
-		gtk_xtext_lastlog (lastlog_sess->res->buffer, sess->res->buffer,
-								 (void *) lastlog_regex_cmp, &reg);
-		regfree (&reg);
-	}
-#endif
 }
 
 void

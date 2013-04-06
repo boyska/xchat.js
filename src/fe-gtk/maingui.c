@@ -986,8 +986,6 @@ mg_populate (session *sess)
 	if (vis != gui->ul_hidden && gui->user_box->allocation.width > 1)
 		render = FALSE;
 
-	gtk_xtext_buffer_show (GTK_XTEXT (gui->xtext), res->buffer, render);
-
 	if (gui->is_tab)
 		gtk_widget_set_sensitive (gui->menu, TRUE);
 
@@ -1098,8 +1096,6 @@ mg_topdestroy_cb (GtkWidget *win, session *sess)
 {
 /*	printf("enter mg_topdestroy. sess %p was destroyed\n", sess);*/
 
-	/* kill the text buffer */
-	gtk_xtext_buffer_free (sess->res->buffer);
 	/* kill the user list */
 	g_object_unref (G_OBJECT (sess->res->user_model));
 
@@ -1113,8 +1109,6 @@ mg_ircdestroy (session *sess)
 {
 	GSList *list;
 
-	/* kill the text buffer */
-	gtk_xtext_buffer_free (sess->res->buffer);
 	/* kill the user list */
 	g_object_unref (G_OBJECT (sess->res->user_model));
 
@@ -1781,12 +1775,9 @@ mg_add_chan (session *sess)
 
 	chan_set_color (sess->res->tab, plain_list);
 
-	if (sess->res->buffer == NULL)
-	{
-		sess->res->buffer = gtk_xtext_buffer_new (GTK_XTEXT (sess->gui->xtext));
-		gtk_xtext_set_time_stamp (sess->res->buffer, prefs.timestamp);
-		sess->res->user_model = userlist_create_model ();
-	}
+	if(!sess->res->user_model)
+		sess->res->user_model = userlist_create_model();
+
 }
 
 static void
@@ -1932,7 +1923,6 @@ mg_link_irctab (session *sess, int focus)
 	win = mg_changui_destroy (sess);
 	mg_changui_new (sess, sess->res, 1, focus);
 	/* the buffer is now attached to a different widget */
-	((xtext_buffer *)sess->res->buffer)->xtext = (GtkXText *)sess->gui->xtext;
 	if (win)
 		gtk_widget_destroy (win);
 }
@@ -3046,14 +3036,8 @@ mg_create_topwindow (session *sess)
 	mg_create_irctab (sess, table);
 	mg_create_menu (sess->gui, table, sess->server->is_away);
 
-	if (sess->res->buffer == NULL)
-	{
-		sess->res->buffer = gtk_xtext_buffer_new (GTK_XTEXT (sess->gui->xtext));
-		gtk_xtext_buffer_show (GTK_XTEXT (sess->gui->xtext), sess->res->buffer, TRUE);
-		gtk_xtext_set_time_stamp (sess->res->buffer, prefs.timestamp);
-		sess->res->user_model = userlist_create_model ();
-	}
-
+	if( ! sess->res->user_model )
+		sess->res->user_model = userlist_create_model();
 	userlist_show (sess);
 
 	gtk_widget_show_all (table);
@@ -3190,8 +3174,6 @@ mg_apply_setup (void)
 	while (list)
 	{
 		sess = list->data;
-		gtk_xtext_set_time_stamp (sess->res->buffer, prefs.timestamp);
-		((xtext_buffer *)sess->res->buffer)->needs_recalc = TRUE;
 		if (!sess->gui->is_tab || !done_main)
 			mg_place_userlist_and_chanview (sess->gui);
 		if (sess->gui->is_tab)
