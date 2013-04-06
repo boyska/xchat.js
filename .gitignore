@@ -39,3 +39,8 @@ autom4te.cache/
 aclocal.m4
 Makefile.in
 
+compile
+config.guess
+config.sub
+depcomp
+missing
