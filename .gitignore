@@ -1,3 +1,13 @@
+#editors
+*.swp
+*.swo
+*~
+
+# build temporary
+*.Po
+*.Plo
+*.gmo
+intl/
 # Object files
 *.o
 
@@ -16,15 +26,16 @@
 *.out
 *.app
 
+#build system
+configure
 Makefile
 config.h
+config.h.in
 config.log
 config.status
 libtool
 stamp-h1
-
 autom4te.cache/
 aclocal.m4
-*.Po
-*.Plo
-*.gmo
+Makefile.in
+
