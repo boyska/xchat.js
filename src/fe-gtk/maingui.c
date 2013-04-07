@@ -2406,7 +2406,6 @@ mg_create_textarea (session *sess, GtkWidget *box)
 	frame = gtk_frame_new (NULL);
 	gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
 	gtk_container_add (GTK_CONTAINER (inbox), frame);
-    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(frame),GTK_POLICY_NEVER,GTK_POLICY_NEVER);
 	gui->xtext = gtk_xtext_new (colors, TRUE);
 	xtext = GTK_XTEXT (gui->xtext);
 	gtk_xtext_set_max_indent (xtext, prefs.max_auto_indent);
@@ -2417,8 +2416,7 @@ mg_create_textarea (session *sess, GtkWidget *box)
 	gtk_container_add (GTK_CONTAINER (frame), GTK_WIDGET (xtext));
 	mg_update_xtext (GTK_WIDGET (xtext));
 
-	g_signal_connect (G_OBJECT (xtext), "word_click",
-							G_CALLBACK (mg_word_clicked), NULL);
+	//g_signal_connect (G_OBJECT (xtext), "word_click",G_CALLBACK (mg_word_clicked), NULL);
 
 	//gui->vscrollbar = gtk_vscrollbar_new (GTK_XTEXT (xtext)->adj);
 	//gtk_box_pack_start (GTK_BOX (inbox), gui->vscrollbar, FALSE, TRUE, 0);

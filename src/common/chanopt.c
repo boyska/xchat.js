@@ -414,9 +414,16 @@ chanopt_save_all (void)
 		}
 
 cont:
-		g_free (co->network);
-		g_free (co->channel);
+/*         //XXX: controllare come mai le free qui danno free(): invalid pointer
+           ma poi goto, io bho, sono allibito.
+    if(co){
+
+		if(co->network) g_free (co->network);
+		if(co->channel) g_free (co->channel);
 		g_free (co);
+        }
+*/
+2+2;
 	}
 
 	close (fh);

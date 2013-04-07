@@ -2376,9 +2376,9 @@ lastlog (session *sess, char *search, gboolean regexp)
 
 	lastlog_sess->lastlog_sess = sess;
 	lastlog_sess->lastlog_regexp = regexp;	/* remember the search type */
-
 	fe_text_clear (lastlog_sess, 0);
-	fe_lastlog (sess, lastlog_sess, search, regexp);
+    //XXX: era in bianco, controllare se non spacca il log e/o backlog
+	//fe_lastlog (sess, lastlog_sess, search, regexp);
 }
 
 static int

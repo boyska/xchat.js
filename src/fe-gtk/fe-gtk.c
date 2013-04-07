@@ -611,18 +611,6 @@ fe_beep (void)
 	gdk_beep ();
 }
 
-#ifndef WIN32
-static int
-lastlog_regex_cmp (char *a, regex_t *reg)
-{
-	return !regexec (reg, a, 1, NULL, REG_NOTBOL);
-}
-#endif
-
-void
-fe_lastlog (session *sess, session *lastlog_sess, char *sstr, gboolean regexp)
-{
-}
 
 void
 fe_set_lag (server *serv, int lag)

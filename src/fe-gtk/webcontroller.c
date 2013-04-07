@@ -196,7 +196,6 @@ static JSValueRef callbacka(JSContextRef ctx, JSObjectRef ff/*func*/, JSObjectRe
 {
 
 	PRONTO=TRUE;
-	fprintf(stderr,"\n\n--------------------------\nOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO\n--------------------------\n");
 	// Create the return value
 	JSStringRef str = JSStringCreateWithUTF8CString("ANO");
 	JSValueRef  ret = JSValueMakeString(ctx, str);
