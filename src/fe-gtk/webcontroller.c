@@ -240,7 +240,6 @@ void create_webview(WebChatController* controller) {
 	JSObjectRef func = JSObjectMakeFunctionWithCallback(controller->context, fname,callbacka);
 	JSObjectSetProperty(controller->context, controller->globalobj, fname, func, kJSPropertyAttributeNone, NULL);
 	JSStringRelease(fname);
-	contello=0;
 
 	while(!PRONTO){
 		if(gtk_events_pending()) gtk_main_iteration(); /* mentre aspetto faccio cose, vedo gente */
@@ -248,9 +247,6 @@ void create_webview(WebChatController* controller) {
 	}
 
 
-
-
-	gtk_container_set_border_width (GTK_CONTAINER(controller->view), 10);
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW(controller->view),GTK_POLICY_AUTOMATIC,GTK_POLICY_ALWAYS);
 	gtk_container_add (GTK_CONTAINER(controller->view), webView);
 

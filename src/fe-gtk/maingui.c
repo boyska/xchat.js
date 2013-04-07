@@ -1056,7 +1056,7 @@ mg_populate (session *sess)
 void
 mg_bring_tofront_sess (session *sess)	/* IRC tab or window */
 {
-		
+
 
 	if (sess->gui->is_tab)
 		chan_focus (sess->res->tab);
@@ -2406,7 +2406,7 @@ mg_create_textarea (session *sess, GtkWidget *box)
 	frame = gtk_frame_new (NULL);
 	gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
 	gtk_container_add (GTK_CONTAINER (inbox), frame);
-
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(frame),GTK_POLICY_NEVER,GTK_POLICY_NEVER);
 	gui->xtext = gtk_xtext_new (colors, TRUE);
 	xtext = GTK_XTEXT (gui->xtext);
 	gtk_xtext_set_max_indent (xtext, prefs.max_auto_indent);
@@ -2420,10 +2420,10 @@ mg_create_textarea (session *sess, GtkWidget *box)
 	g_signal_connect (G_OBJECT (xtext), "word_click",
 							G_CALLBACK (mg_word_clicked), NULL);
 
-	gui->vscrollbar = gtk_vscrollbar_new (GTK_XTEXT (xtext)->adj);
-	gtk_box_pack_start (GTK_BOX (inbox), gui->vscrollbar, FALSE, TRUE, 0);
-#ifndef WIN32	/* needs more work */
-	gtk_drag_dest_set (gui->vscrollbar, 5, dnd_dest_targets, 2,
+	//gui->vscrollbar = gtk_vscrollbar_new (GTK_XTEXT (xtext)->adj);
+	//gtk_box_pack_start (GTK_BOX (inbox), gui->vscrollbar, FALSE, TRUE, 0);
+#ifndef WIN32
+	/*gtk_drag_dest_set (gui->vscrollbar, 5, dnd_dest_targets, 2,
 							 GDK_ACTION_MOVE | GDK_ACTION_COPY | GDK_ACTION_LINK);
 	g_signal_connect (G_OBJECT (gui->vscrollbar), "drag_begin",
 							G_CALLBACK (mg_drag_begin_cb), NULL);
@@ -2437,8 +2437,9 @@ mg_create_textarea (session *sess, GtkWidget *box)
 	gtk_drag_dest_set (gui->xtext, GTK_DEST_DEFAULT_ALL, dnd_targets, 1,
 							 GDK_ACTION_MOVE | GDK_ACTION_COPY | GDK_ACTION_LINK);
 	g_signal_connect (G_OBJECT (gui->xtext), "drag_data_received",
-							G_CALLBACK (mg_dialog_dnd_drop), NULL);
+							G_CALLBACK (mg_dialog_dnd_drop), NULL);*/
 #endif
+
 }
 
 static GtkWidget *
@@ -2448,6 +2449,7 @@ mg_create_infoframe (GtkWidget *box)
 
 	frame = gtk_frame_new (0);
 	gtk_frame_set_shadow_type ((GtkFrame*)frame, GTK_SHADOW_OUT);
+
 	gtk_container_add (GTK_CONTAINER (box), frame);
 
 	hbox = gtk_hbox_new (0, 0);
