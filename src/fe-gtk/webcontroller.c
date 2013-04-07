@@ -58,53 +58,60 @@ UIChat *uichat_new(char *from, int type) {
 }
 
 
+const JSObjectRef uichat_invokev(UIChat *chat, char function[] , char arg_format[], ...) {
+	/* Invoke a javascript function in the UIChat. The arguments type are
+	 * described by the stringarg_format, as a list of types, each described by
+	 * a char.
+	 's'	string
+	 'd'	integer
+	 'f'	float/double
+	 'b'	boolean
+	 ' '	undefined (note that you must anyway pass a parameter for undefined,
+			even if it will be ignored; NULL is a good choice)
+	*/
+	va_list args;
+	JSValueRef *js_args;
+	JSValueRef result;
+	int i;
 
-char* palette[6]={"#E01B6A", "#7E1BE0","#1B7EE0","#1BE070","#D6E01B", "#E05D1B" };
-int nickbycolor(char* n){ /*XXX: la roba piu' scema del mondo, inserire i colori personalizzati, hash a modo del nick etc etc*/
-    int i = 0, sum = 0;
-    while (n[i])
-      sum += n[i++];
-   return sum%6;
+	js_args = calloc(strlen(arg_format), sizeof(JSValueRef));
+	va_start(args, arg_format);
+	for(i=0; arg_format[i]; i++) {
+		switch(arg_format[i]) {
+			case 's':
+				js_args[i] = JSValueMakeString(chat->context,
+						JSStringCreateWithUTF8CString(va_arg(args, char*)));
+				break;
+			case 'd':
+				js_args[i] = JSValueMakeNumber(chat->context, (double)va_arg(args, int));
+				break;
+			case 'f':
+				js_args[i] = JSValueMakeNumber(chat->context, (double)va_arg(args, double));
+				break;
+			case 'b':
+				js_args[i] = JSValueMakeBoolean(chat->context, va_arg(args, int));
+				break;
+			case ' ':
+			default:
+				va_arg(args, void*);
+				js_args[i] = JSValueMakeUndefined(chat->context);
+				break;
+		}
+	}
+    JSObjectRef functionObject = (JSObjectRef)JSObjectGetProperty(chat->context, chat->globalobj,JSStringCreateWithUTF8CString(function), NULL);
+    result = JSObjectCallAsFunction(chat->context, functionObject, chat->globalobj, i, js_args, NULL);
+	va_end(args);
+	free(js_args);
+
+	return (const JSObjectRef) result;
 }
 
-
-
 void w_printpartjoin(UIChat *chat,char* n, char * s, char* stamp){
-    JSStringRef chanmsg= JSStringCreateWithUTF8CString("w_linepjoin");
-    JSValueRef  arguments[3];
-    JSValueRef result;
-    int num_arguments = 3;
-    JSStringRef string = JSStringCreateWithUTF8CString((const char *)s);
-    JSStringRef nick = JSStringCreateWithUTF8CString((const char *)n);
-    JSStringRef timero = JSStringCreateWithUTF8CString(stamp?stamp:"none");
-    arguments[0] = JSValueMakeString(chat->context,nick);
-    arguments[1] = JSValueMakeString(chat->context,string);
-    arguments[2] = JSValueMakeString(chat->context,timero);
-    JSObjectRef functionObject = (JSObjectRef)JSObjectGetProperty(chat->context, chat->globalobj,chanmsg, NULL);
-    result = JSObjectCallAsFunction(chat->context, functionObject, chat->globalobj, num_arguments, arguments, NULL);
+	uichat_invokev(chat, "w_linepjoin", "sss", n, s, stamp);
 }
 
 void w_printchanmsg(UIChat *chat,char* n, char* s,char* stamp,int action, int high){
-    JSStringRef chanmsg= JSStringCreateWithUTF8CString("w_linechanmsg");
-    JSValueRef  arguments[6];
-    JSValueRef result;
-    int num_arguments = 6;
-    JSStringRef string = JSStringCreateWithUTF8CString((const char *)s);
-    JSStringRef nick = JSStringCreateWithUTF8CString((const char *)n);
-    int colnum=nickbycolor(n);
-    char* colorozzo=palette[colnum];
-    JSStringRef color = JSStringCreateWithUTF8CString((const char *)colorozzo);
-    JSStringRef timero = JSStringCreateWithUTF8CString(stamp?stamp:"none");
-    arguments[0] = JSValueMakeString(chat->context,timero);
-    arguments[1] = JSValueMakeString(chat->context,color);
-    arguments[2] = JSValueMakeString(chat->context,nick);
-    arguments[3] = JSValueMakeString(chat->context,string);
-    arguments[4] = JSValueMakeBoolean(chat->context,action);
-    arguments[5] = JSValueMakeBoolean(chat->context,high);
-
-    JSObjectRef functionObject = (JSObjectRef)JSObjectGetProperty(chat->context, chat->globalobj,chanmsg, NULL);
-    result = JSObjectCallAsFunction(chat->context, functionObject, chat->globalobj, num_arguments, arguments, NULL);
-
+	uichat_invokev(chat, "w_linechanmsg", "s ssbb", stamp ? stamp:"none", NULL, n, s, action, high);
 }
 
 
