@@ -4,7 +4,7 @@
 #include <JavaScriptCore/JavaScript.h>
 #include "webcontroller.h"
 #include "../common/textenums.h"
-
+#include <sys/time.h>
 
 GtkWidget* chat_notebook = NULL;
 
@@ -30,7 +30,7 @@ GtkWidget* get_wview_container(){
 }
 
 void set_tab_by_index(gint i){ /* se esiste e' tutto bono visto che se sbaglio i non succede nulla*/
-    if(chat_notebook) 
+    if(chat_notebook)
         gtk_notebook_set_current_page(GTK_NOTEBOOK(chat_notebook),i);
 }
 
@@ -42,7 +42,7 @@ void create_webview(WebChatController *);
 UIChat *uichat_new(char *from, int type) {
 	WebChatController *controller = malloc(sizeof(WebChatController));
 	GtkWidget *label;
-    /* glielo passo come argomento perche' inizializza' un bel po di roba*/	
+    /* glielo passo come argomento perche' inizializza' un bel po di roba*/
     create_webview(controller);
 	label = from ? gtk_label_new(from) : NULL;
 
@@ -58,7 +58,15 @@ UIChat *uichat_new(char *from, int type) {
 }
 
 
+volatile int PRONTO = FALSE; /* globale, e volatile, speriamo basti a non rompere tutto */
+
+
+
+
 const JSObjectRef uichat_invokev(UIChat *chat, char function[] , char arg_format[], ...) {
+
+
+
 	/* Invoke a javascript function in the UIChat. The arguments type are
 	 * described by the stringarg_format, as a list of types, each described by
 	 * a char.
@@ -182,6 +190,24 @@ WebKitNavigationResponse click_callback(WebKitWebView* web_view,WebKitWebFrame* 
 
 
 
+
+
+static JSValueRef callbacka(JSContextRef ctx, JSObjectRef ff/*func*/, JSObjectRef obj/*self*/, size_t argc, const JSValueRef argv[], JSValueRef* e/*exception*/)
+{
+
+	PRONTO=TRUE;
+	fprintf(stderr,"\n\n--------------------------\nOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO\n--------------------------\n");
+	// Create the return value
+	JSStringRef str = JSStringCreateWithUTF8CString("ANO");
+	JSValueRef  ret = JSValueMakeString(ctx, str);
+	JSStringRelease(str);
+	return ret;
+}
+
+
+
+
+
 void create_webview(WebChatController* controller) {
 	GtkWidget *webView = webkit_web_view_new();
 	//XXX: gestire a modino tutti i path (locali?) della roba (html,js,css)
@@ -202,6 +228,27 @@ void create_webview(WebChatController* controller) {
 	//incastro la webview vera in una scrolled windows cosi' ho quello che mi aspetto dallo scrolling
 	controller->view = gtk_scrolled_window_new(NULL,NULL);
 	g_object_set (controller->view, "shadow-type", GTK_SHADOW_IN, NULL);
+
+
+
+	PRONTO=FALSE; /* la setto a false perche' me la risettera' il js appena pronto
+	XXX: controllare in caso di interleave (puo' succedere?) se qualcuno perde il primo
+	*/
+
+
+	JSStringRef fname = JSStringCreateWithUTF8CString("jsready");
+	JSObjectRef func = JSObjectMakeFunctionWithCallback(controller->context, fname,callbacka);
+	JSObjectSetProperty(controller->context, controller->globalobj, fname, func, kJSPropertyAttributeNone, NULL);
+	JSStringRelease(fname);
+	contello=0;
+
+	while(!PRONTO){
+		if(gtk_events_pending()) gtk_main_iteration(); /* mentre aspetto faccio cose, vedo gente */
+
+	}
+
+
+
 
 	gtk_container_set_border_width (GTK_CONTAINER(controller->view), 10);
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW(controller->view),GTK_POLICY_AUTOMATIC,GTK_POLICY_ALWAYS);

@@ -244,7 +244,7 @@ fe_userlist_set_selected (struct session *sess)
 				user->selected = 1;
 			else
 				user->selected = 0;
-				
+
 		} while (gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter));
 	}
 }

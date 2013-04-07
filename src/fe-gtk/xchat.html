@@ -184,12 +184,21 @@ w_lineserver=xchat.printaserver;
 w_clear=xchat.clear;
 w_linechanmsg=xchat.printachanmsg;
 w_linepjoin=xchat.printpjoin;
+
+$(window).load(function(){
+     jsready();
+});
+
+
+
 </script>
 
 </head>
 <body>
 <div class="container">
 <h1>TEST Locale</h1>
+<button onclick="backa();">Click me</button>
+
 <!--<p class="line" id="it1">UNO</p>
 <p class="line" id="it2">DUE</p>
 <p class="line" id="it3">TRE</p>
