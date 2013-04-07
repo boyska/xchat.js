@@ -46,7 +46,7 @@ UIChat *uichat_new(char *from, int type) {
     create_webview(controller);
 	label = from ? gtk_label_new(from) : NULL;
 
-	printf("CHAT creato view per %s\n", from);
+	printf("CHAT creato view per %s a %p\n", from, controller);
 	if(!get_wview_container())
 		return controller;
 	if(from){ /* XXX: l'appendo solo se from!=NULL, serve crearlo in quel caso? investigare.*/
@@ -111,14 +111,16 @@ void w_printpartjoin(UIChat *chat,char* n, char * s, char* stamp){
 }
 
 void w_printchanmsg(UIChat *chat,char* n, char* s,char* stamp,int action, int high){
-	uichat_invokev(chat, "w_linechanmsg", "s ssbb", stamp ? stamp:"none", NULL, n, s, action, high);
+	uichat_invokev(chat, "w_linechanmsg", "sssbb", stamp ? stamp:"none", n, s, action, high);
+}
+void w_printprivmsg(UIChat *chat, char*n, char*s) {
+	uichat_invokev(chat, "w_linechanmsg", "sssbb", "none", n, s, 0, 0);
 }
 
 
 
 
 void uichat_add_msg(UIChat *chat, char* from, char* msg,int index,char* stamp) {
-
 	switch (index)
 	{
 	case XP_TE_JOIN:
@@ -133,7 +135,10 @@ void uichat_add_msg(UIChat *chat, char* from, char* msg,int index,char* stamp) {
 	case XP_TE_DPRIVMSG:
 	case XP_TE_PRIVACTION:
 	case XP_TE_DPRIVACTION:
-        //TODO: da capire se serve una nuova chat, se e' già fatta etc. (all'interno basta usare channel message poi)
+        //TODO: questo si "perde" il primo messaggio di una chat privata. Forse
+		//e' gestito da un'altra parte?
+		printf("Priv chat at address %p\n", chat);
+		w_printprivmsg(chat, from, msg);
 		break;
 
 	/* ===Highlighted message=== */

@@ -159,13 +159,13 @@ function Xchat(){
     this.clear=function(){$("#irc").html("");}
     this.printaraw=   function(s){ $("#irc").append(parses(templates.raw,{counter:counter(),text:s})); funct.scroll(); }
     this.printaserver=function(s){ $("#irc").append(parses(templates.server,{counter:counter(),text:s})); funct.scroll(); }
-    this.printachanmsg=function(t,c,n,s,a,h){
+    this.printachanmsg=function(t,n,s,a,h){
         var templo;
         var classona=""
         if(t!="none"){templo=templates.chantmsg}
         else {templo=templates.chanmsg}
         if(a) classona=classona+" action"
-        if(h) {classona=classona+" high", c="#FF0000";}
+		if(h) {classona=classona+" high";}
         $("#irc").append(parses(templo,{counter:counter(),text:rendertxt(s),classa:classona,color:stringtocol(n),time:t,nickname:n})); funct.scroll();
     }
     this.printpjoin=  function(n,s,t){
