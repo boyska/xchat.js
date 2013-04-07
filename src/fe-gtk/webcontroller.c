@@ -103,10 +103,25 @@ const JSObjectRef uichat_invokev(UIChat *chat, char function[] , char arg_format
 				break;
 		}
 	}
-    JSObjectRef functionObject = (JSObjectRef)JSObjectGetProperty(chat->context, chat->globalobj,JSStringCreateWithUTF8CString(function), NULL);
-    result = JSObjectCallAsFunction(chat->context, functionObject, chat->globalobj, i, js_args, NULL);
 	va_end(args);
+	JSObjectRef functionObject = (JSObjectRef)JSObjectGetProperty(chat->context,
+			chat->globalobj,JSStringCreateWithUTF8CString(function), NULL);
+	JSValueRef exc = NULL;
+    result = JSObjectCallAsFunction(chat->context, functionObject,
+			chat->globalobj, i, js_args, &exc);
 	free(js_args);
+	if(!result) { //TODO: && DEBUG
+		if(exc) {
+			char *buf = calloc(400, sizeof(char));
+			JSStringRef json = JSValueToStringCopy(chat->context, exc, NULL);
+
+			int buf_chars = JSStringGetUTF8CString(json, buf, 390);
+			printf("EXCEPTION while invoking JS:\n%s\n", buf);
+			free(buf);
+		} else {
+			fprintf(stderr, "Error: method %s does not (still?) exist\n", function);
+		}
+	}
 
 	return (const JSObjectRef) result;
 }
@@ -148,7 +163,7 @@ void uichat_add_msg(UIChat *chat, char* from, char* msg,int index,char* stamp) {
 	case XP_TE_DPRIVACTION:
         //TODO: questo si "perde" il primo messaggio di una chat privata. Forse
 		//e' gestito da un'altra parte?
-		printf("Priv chat at address %p\n", chat);
+		printf("Priv chat at address %p: %s\n", chat, msg);
 		w_printprivmsg(chat, from, msg);
 		break;
 
