@@ -636,7 +636,7 @@ if test "x$GCC" = "xyes"; then
 		fi
 	fi
 	if test -z "`echo "$CFLAGS" | grep "\-g " 2> /dev/null`" ; then
-		CFLAGS="$CFLAGS -g"
+		CFLAGS="$CFLAGS -g -O0"
 	fi
 fi
 

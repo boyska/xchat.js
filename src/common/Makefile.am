@@ -51,11 +51,13 @@ libxchatcommon_a_LIBADD =				\
 endif
 SUBDIRS = $(dbusdir) .
 
-libxchatcommon_a_SOURCES = cfgfiles.c chanopt.c ctcp.c dcc.c history.c ignore.c \
+libxchatcommon_a_SOURCES = text.h cfgfiles.c chanopt.c ctcp.c dcc.c history.c ignore.c \
 	inbound.c modes.c msproxy.c network.c notify.c outbound.c \
 	plugin.c plugin-timer.c proto-irc.c server.c servlist.c $(ssl_c) \
 	text.c tree.c url.c userlist.c util.c xchat.c
 
+text.h: make-te
+	./make-te < textevents.in > textevents.h 2> textenums.h
 textenums.h: make-te
 	./make-te < textevents.in > textevents.h 2> textenums.h
 textevents.h: make-te
