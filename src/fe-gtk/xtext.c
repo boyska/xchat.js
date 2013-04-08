@@ -49,7 +49,7 @@
 #include <gtk/gtkclipboard.h>
 #include <gtk/gtkversion.h>
 #include <gtk/gtkwindow.h>
-
+#include "webcontroller.h"
 
 #ifdef XCHAT
 #include "../../config.h"			/* can define USE_XLIB here */
@@ -424,26 +424,11 @@ backend_get_char_width (GtkXText *xtext, unsigned char *str, int *mbl_ret)
 	}
 
 	*mbl_ret = charlen (str);
-	pango_layout_set_text (xtext->layout, str, *mbl_ret);
+	pango_layout_set_text (xtext->layout, (const char *)str, *mbl_ret);
 	pango_layout_get_pixel_size (xtext->layout, &width, NULL);
 
 	return width;
 }
-
-
-/*static void
-backend_set_clip (GtkXText *xtext, GdkRectangle *area)
-{
-	gdk_gc_set_clip_rectangle (xtext->fgc, area);
-	gdk_gc_set_clip_rectangle (xtext->bgc, area);
-}
-
-static void
-backend_clear_clip (GtkXText *xtext)
-{
-	gdk_gc_set_clip_rectangle (xtext->fgc, NULL);
-	gdk_gc_set_clip_rectangle (xtext->bgc, NULL);
-}*/
 
 #endif /* !USE_PANGO */
 
@@ -561,13 +546,11 @@ gtk_xtext_adjustment_changed (GtkAdjustment * adj, GtkXText * xtext)
 }
 
 /*
-XXX: metto la webview al posto della fuffa sua
-
-
-
+	XXX: metto la webview al posto della fuffa sua
 */
 
 struct User* user_tmp;
+
 GtkWidget *
 gtk_xtext_new (GdkColor palette[], int separator)
 {

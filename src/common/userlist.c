@@ -28,7 +28,6 @@
 #include "xchatc.h"
 #include "util.h"
 
-
 static int
 nick_cmp_az_ops (server *serv, struct User *user1, struct User *user2)
 {

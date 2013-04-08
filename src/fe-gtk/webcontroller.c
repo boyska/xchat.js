@@ -26,6 +26,7 @@ void create_wview(){
 }
 
 GtkWidget* get_wview_container(){
+    if(chat_notebook == NULL) create_wview();
     return chat_notebook;
 }
 
@@ -34,10 +35,6 @@ void set_tab_by_index(gint i){ /* se esiste e' tutto bono visto che se sbaglio i
         gtk_notebook_set_current_page(GTK_NOTEBOOK(chat_notebook),i);
 }
 
-
-
-
-void create_webview(WebChatController *);
 
 UIChat *uichat_new(char *from, int type) {
 	WebChatController *controller = malloc(sizeof(WebChatController));
@@ -125,12 +122,18 @@ void w_printprivmsg(UIChat *chat, char*n, char*s) {
 	uichat_invokev(chat, "w_linechanmsg", "sssbb", "none", n, s, 0, 0);
 }
 
-
+void w_printbacklog(UIChat *chat, char* s){
+	uichat_invokev(chat, "w_linebacklog", "s", s);
+}
 
 
 void uichat_add_msg(UIChat *chat, char* from, char* msg,int index,char* stamp) {
 	switch (index)
 	{
+	case XP_TE_WK_BACKLOG:
+	case XP_TE_WK_SERVERMIX:
+		w_printbacklog(chat,from);
+		break;
 	case XP_TE_JOIN:
 	case XP_TE_PART:
 	case XP_TE_PARTREASON:

@@ -330,6 +330,9 @@ scrollback_load (session *sess)
 			if (text)
 			{
 				text = strip_color (text + 1, -1, STRIP_COLOR);
+				//XXX: ancora backlog
+				uichat_add_msg(sess->ui_chat,text,NULL,XP_TE_WK_BACKLOG,NULL);
+
 				fe_print_text (sess, text, stamp);
 				g_free (text);
 			}
@@ -346,6 +349,9 @@ scrollback_load (session *sess)
 		text = ctime (&stamp);
 		text[24] = 0;	/* get rid of the \n */
 		snprintf (buf, sizeof (buf), "\n*\t%s %s\n\n", _("Loaded log from"), text);
+		//XXX: Questo e' il backlog!!!!!
+		uichat_add_msg(sess->ui_chat,buf,NULL,XP_TE_WK_BACKLOG,NULL);
+
 		fe_print_text (sess, buf, 0);
 		/*EMIT_SIGNAL (XP_TE_GENMSG, sess, "*", buf, NULL, NULL, NULL, 0);*/
 	}
@@ -877,7 +883,6 @@ PrintText (session *sess, char *text)
 	log_write (sess, text);
 	scrollback_save (sess, text);
 	fe_print_text (sess, text, 0);
-
 	if (conv)
 		g_free (conv);
 }
@@ -1778,7 +1783,10 @@ display_event (session *sess, int event, char **args, unsigned int stripcolor_ar
 	char o[4096];
 	format_event (sess, event, args, o, sizeof (o), stripcolor_args);
 	if (o[0])
-		PrintText (sess, o);
+		{//PrintText (sess, o);
+			/* XXX: e' la roba server e qualche action (topic, motd etc)*/
+	//fprintf(stderr,"QYQYYQYQYQYQY: %s\n",text);
+	uichat_add_msg(sess->ui_chat,o,NULL,XP_TE_WK_SERVERMIX,NULL); }
 }
 
 int
@@ -2073,7 +2081,7 @@ text_emit (int index, session *sess, char *a, char *b, char *c, char *d)
 	}
 
 	sound_play_event (index);
-	display_event (sess, index, word, stripcolor_args);
+	//display_event (sess, index, word, stripcolor_args);
 }
 
 char *

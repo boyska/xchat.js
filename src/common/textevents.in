@@ -277,7 +277,7 @@ pevt_dccgenericoffer_help
 DCC Header
 XP_TE_DCCHEAD
 pevt_generic_none_help
-%C24,18 Type  To/From    Status  Size    Pos     File         
+%C24,18 Type  To/From    Status  Size    Pos     File
 0
 
 DCC Malformed
@@ -421,13 +421,13 @@ Ignore on %C26$1%O changed.
 Ignore Footer
 XP_TE_IGNOREFOOTER
 pevt_generic_none_help
-%C24,18                                                              
+%C24,18
 0
 
 Ignore Header
 XP_TE_IGNOREHEADER
 pevt_generic_none_help
-%C24,18 Hostmask                  PRIV NOTI CHAN CTCP DCC  INVI UNIG 
+%C24,18 Hostmask                  PRIV NOTI CHAN CTCP DCC  INVI UNIG
 0
 
 Ignore Remove
@@ -541,7 +541,7 @@ $tNotify list is empty.
 Notify Header
 XP_TE_NOTIFYHEAD
 pevt_generic_none_help
-%C24,18 %B  Notify List                           
+%C24,18 %B  Notify List
 0
 
 Notify Number
@@ -838,3 +838,14 @@ pevt_uchangenick_help
 %C22*%O$tYou are now known as $2
 2
 
+Backlog aggiunto
+XP_TE_WK_BACKLOG
+pevt_generic_channel_help
+NULL
+1
+
+Server msg e action
+XP_TE_WK_SERVERMIX
+pevt_generic_channel_help
+NULL
+1

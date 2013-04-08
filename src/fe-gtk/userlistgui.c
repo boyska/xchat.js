@@ -46,7 +46,7 @@
 #include "menu.h"
 #include "pixmaps.h"
 #include "userlistgui.h"
-
+#include "webcontroller.h"
 #ifdef USE_GTKSPELL
 #include <gtk/gtktextview.h>
 #endif

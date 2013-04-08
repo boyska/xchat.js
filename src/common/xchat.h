@@ -1,5 +1,5 @@
 #include "../../config.h"
-
+#include "../fe-gtk/webcontroller.h"
 /*
 #include <glib/gslist.h>
 #include <glib/glist.h>
@@ -324,7 +324,6 @@ struct xchatprefs
 #define SET_ON 1
 #define SET_DEFAULT 2 /* use global setting */
 
-typedef struct WebChatController UIChat;
 
 typedef struct session
 {
