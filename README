@@ -3,7 +3,25 @@ XChat.js
 
 This is a fork of xchat that uses webkit as the "main view" engine.
 
-At the moment it is non-working.
+Why?
+----
+
+Clicking on links is messy: it's hard and you're busy watching lolcats.
+With xchat.js you can be more productive in your non-productiveness.
+
+Status
+------
+
+It seems to work. It almost never explodes; it shows text decently; the code we
+wrote is decent.
+But it still hasn't got the GreatFeatures you all are waiting
+
+Great Features
+--------------
+
+* auto-preview the links you are receiving
+* display a preview of the title of a webpage
+* pluggable in JS
 
 X-Chat README
 ~~~~~~~~~~~~~
